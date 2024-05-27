@@ -5,6 +5,33 @@ from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
 import uuid
+import jwt
+from cryptography.fernet import Fernet
+from PIL import Image
+
+def load_cipher():
+    try:
+        with open('.key', 'rb') as archivo_clave:
+            key = archivo_clave.read()
+    except FileNotFoundError:
+        key = Fernet.generate_key()
+        with open('.key', 'wb') as archivo_clave:
+            archivo_clave.write(key)
+        print("LA LLAVE DE CIFRADO HA CAMBIADO")
+    return key
+
+cipher = Fernet(load_cipher())
+
+def save_image(img, prefix):
+    prefix = "user_RP"
+    filename = f'{prefix}_{format(datetime.now().strftime("%Y%m%d_%H%M%S"))}_{str(uuid.uuid4())}'
+    path = os.path.join(UPLOAD_FOLDER, filename)
+    imagen_pil = Image.open(img)
+    if imagen_pil.mode != 'RGB':
+        imagen_pil = imagen_pil.convert('RGB')
+    imagen_pil.save(path, 'JPEG')
+    return filename
+
 
 WTF_CSRF_ENABLED = False #DESACTIVA CSRF
 UPLOAD_FOLDER = 'uploads'
@@ -21,15 +48,17 @@ def registerUser():
         response = jsonify({'csrf_token': csrf_token})
         response.headers['X-CSRFToken'] = csrf_token # ESTO SE SUPONE QUE GUARDA EL CSRF EN UN ENCABEZADO SIN ACCION EN EL FRONT
         return response, 200
-    
+
     if request.method == 'POST':
-            #data = 
+            #data =
         #csrf_token = request.headers.get('X-CSRFToken')
         #if not validate_csrf(csrf_token):
         #    return jsonify({'error': 'Token CSRF inválido'}), 400
         #form = UserForm(request.form)
         #if form.validate():
 
+
+        # OBTENER LOS DATOS EDL FORMULARIO
         email = request.form.get('email')
         name = request.form.get('name')
         lastname = request.form.get('lastname')
@@ -45,8 +74,14 @@ def registerUser():
         codigo_seguridad = request.form.get('codigo_seguridad')
         fecha_expiracion = request.form.get('fecha_expiracion')
         numero_tarjeta = request.form.get('numero_tarjeta')
-        # Procesar los archivos subidos
 
+
+        # GUARDAR LAS IMAGENES SUBIDAS
+        recibo_publico = save_image(recibo_publico, "user_RP")
+        foto_perfil = save_image(foto_perfil, "user_RP")
+        imagen_documento = save_image(imagen_documento, "user_RP")
+
+        """
         filename = 'user_RP_{}_{}'.format(datetime.now().strftime("%Y%m%d_%H%M%S"), str(uuid.uuid4()))
         recibo_publico.save(os.path.join(UPLOAD_FOLDER, filename))
         recibo_publico = filename
@@ -58,6 +93,14 @@ def registerUser():
         filename = 'user_ID_{}_{}'.format(datetime.now().strftime("%Y%m%d_%H%M%S"), str(uuid.uuid4()))
         imagen_documento.save(os.path.join(UPLOAD_FOLDER, filename))
         imagen_documento = filename
+        """
+
+        #ENCRIPTANDO DATOS DE LA TARJETA
+        tipo_tarjeta = cipher.encrypt(tipo_tarjeta.encode())
+        codigo_seguridad = cipher.encrypt(codigo_seguridad.encode())
+        fecha_expiracion = cipher.encrypt(fecha_expiracion.encode())
+        numero_tarjeta = cipher.encrypt(numero_tarjeta.encode())
+
 
         data = {
             'email': email,
@@ -69,12 +112,14 @@ def registerUser():
             'recibo_publico': recibo_publico,
             'foto_perfil': foto_perfil,
             'imagen_documento': imagen_documento,
-            'tipo_tarjeta': tipo_tarjeta,
-            'codigo_seguridad': codigo_seguridad,
-            'fecha_expiracion': fecha_expiracion,
-            'numero_tarjeta': numero_tarjeta
+            'tipo_tarjeta': cipher.decrypt(tipo_tarjeta).decode(),
+            'codigo_seguridad': cipher.decrypt(codigo_seguridad).decode(),
+            'fecha_expiracion': cipher.decrypt(fecha_expiracion).decode(),
+            'numero_tarjeta': cipher.decrypt(numero_tarjeta).decode()
         }
 
+        #credenciales_descifradas = cipher.decrypt(codigo_seguridad).decode() DESENCRIPTAR
+        print(data)
         return jsonify(data), 200
 
 #Registra un nuevo profesional
