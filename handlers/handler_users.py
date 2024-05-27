@@ -9,6 +9,9 @@ import jwt
 from cryptography.fernet import Fernet
 from PIL import Image
 
+WTF_CSRF_ENABLED = False #DESACTIVA CSRF
+UPLOAD_FOLDER = 'uploads'
+
 def load_cipher():
     try:
         with open('.key', 'rb') as archivo_clave:
@@ -31,10 +34,6 @@ def save_image(img, prefix):
         imagen_pil = imagen_pil.convert('RGB')
     imagen_pil.save(path, 'JPEG')
     return filename
-
-
-WTF_CSRF_ENABLED = False #DESACTIVA CSRF
-UPLOAD_FOLDER = 'uploads'
 
 # Genera el token CSRF
 def generateCSRF():
