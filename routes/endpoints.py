@@ -7,4 +7,6 @@ api.add_url_rule('/', 'landing', handler.index)
 
 # Envia el CSRF token para validar el formulario - GET
 # Recibe los datos del registro de un profesional - POST
-api.add_url_rule('/register/user', 'registrar profesional', handler_users.registerUser, methods=['POST', 'GET'])
+api.add_url_rule('/register/user', 'endpoint registrar usuario', handler_users.registerUser, methods=['POST', 'GET'])
+api.add_url_rule('/register/professional', 'endpoint registrar profesional', handler_users.registerProfessional, methods=['POST', 'GET'])
+
