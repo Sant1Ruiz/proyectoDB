@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FileField
+from wtforms import StringField, FileField, PasswordField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -17,3 +17,8 @@ class UserForm(FlaskForm):
     codigo_seguridad = StringField('Código de Seguridad', validators=[DataRequired(), Length(min=3, max=4)])
     fecha_expiracion = StringField('Fecha de Expiración', validators=[DataRequired()])
     numero_tarjeta = StringField('Número de Tarjeta', validators=[DataRequired(), Length(min=16, max=16)])
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=20)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
