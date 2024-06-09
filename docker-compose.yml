@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: backend/
+    ports:
+      - "80:7770"
+    environment:
+      DB_HOST: db
+      DB_DATABASE: proyecto
+      DB_USER: pinito
+      DB_PASSWORD: pinito123
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["bash", "-c", "echo 'Esperando 5 segundos mientras la DB se termina de instanciar' && sleep 5 && python app.py"]
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: proyecto
+      POSTGRES_USER: pinito
+      POSTGRES_PASSWORD: pinito123
+    volumes:
+      - ./DB:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pinito -d proyecto"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+

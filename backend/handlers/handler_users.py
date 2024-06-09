@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from utils.wtf import UserForm
 from utils import security, save_image
-from db import gets, sets
+from db import init as db
 
 WTF_CSRF_ENABLED = False #DESACTIVA CSRF
 
@@ -18,11 +18,12 @@ def registerUser():
     if request.method == 'POST':
         # OBTENER LOS DATOS EDL FORMULARIO
         email = request.form.get('email')
+        password =  request.form.get('password')
         name = request.form.get('name')
         lastname = request.form.get('lastname')
         latitud = request.form.get('latitud')
         longitud = request.form.get('longitud')
-        numero_celular = request.form.get('numero_celular')
+        telefono = request.form.get('telefono')
 
         recibo_publico = request.files['recibo_publico']
 
@@ -40,15 +41,21 @@ def registerUser():
         fecha_expiracion = cipher.encrypt(fecha_expiracion.encode())
         numero_tarjeta = cipher.encrypt(numero_tarjeta.encode())
 
+        # HASHEAR PASSWORD
+        password = security.hash(password)
 
         data = {
             'email': email,
+            'password': password,
+            'recibo_publico': recibo_publico,
             'name': name,
             'lastname': lastname,
             'latitud': latitud,
             'longitud': longitud,
-            'numero_celular': numero_celular,
-            'recibo_publico': recibo_publico,
+            'telefono': telefono,
+            'foto_perfil': '',
+            'imagen_documento': '',
+            'disponibilidad': True,
 
             'tipo_tarjeta': cipher.decrypt(tipo_tarjeta).decode(),
             'codigo_seguridad': cipher.decrypt(codigo_seguridad).decode(),
@@ -57,13 +64,13 @@ def registerUser():
         }
 
         #GUARDAR LOS DATOS EN LA DB
-        resp = sets.new_user(data, 'user')
+        resp, error = db.add_user(data, 'Cliente')
         if resp:
             print("Se ha creado un nuevo registro con exito.")
-            return jsonify(data), 201
+            return jsonify({'msg': 'created'}), 201
         else:
             print("Fallo al crear el nuevo registro.")
-            return jsonify(data), 400
+            return jsonify({'ERROR': str(error)}), 400
 
         #credenciales_descifradas = cipher.decrypt(codigo_seguridad).decode() DESENCRIPTAR
 
@@ -72,7 +79,7 @@ def registerUser():
 def registerProfessional():
     if request.method == 'GET':
         csrf_token = security.generateCSRF()
-        jobs = gets.get_all_jobs()
+        jobs = db.get_all_jobs()
         response = jsonify({'csrf_token': csrf_token, 'labores': jobs})
 
         response.headers['X-CSRFToken'] = csrf_token # ESTO SE SUPONE QUE GUARDA EL CSRF EN UN ENCABEZADO SIN ACCION EN EL FRONT
@@ -80,10 +87,14 @@ def registerProfessional():
     
     if request.method == 'POST':
         email = request.form.get('email')
+        password =  request.form.get('password')
         name = request.form.get('name')
         lastname = request.form.get('lastname')
         latitud = request.form.get('latitud')
         longitud = request.form.get('longitud')
+        labor = request.form.get('labor')
+        precio_hora = request.form.get('precio_hora')
+        telefono = request.form.get('telefono')
 
         foto_perfil = request.files['foto_perfil']
         imagen_documento = request.files['imagen_documento']
@@ -91,39 +102,72 @@ def registerProfessional():
         foto_perfil = save_image.save_image(foto_perfil, "profesional_FP")
         imagen_documento = save_image.save_image(imagen_documento, "profesional_ID")
 
+        # HASHEAR PASSWORD
+        password = security.hash(password)
+
         data = { #Para cada labor debe poner su precio por hora o unidad de labor.
             'email': email,
+            'password': password,
+            'recibo_publico': '',
             'name': name,
             'lastname': lastname,
             'latitud': latitud,
             'longitud': longitud,
             'foto_perfil': foto_perfil,
-            'imagen_documento': imagen_documento,            
+            'imagen_documento': imagen_documento,
+            'disponibilidad': True,
+            'labor': labor,
+            'precio_hora': precio_hora,
+            'telefono': telefono
         }
 
         #GUARDAR LOS DATOS EN LA DB
-        resp = sets.new_user(data, 'professional')
+        resp, error = db.add_user(data, 'Trabajador')
         if resp:
             print("Se ha creado un nuevo registro con exito.")
-            return jsonify(data), 201
+            return jsonify({'msg': 'created'}), 201
         else:
             print("Fallo al crear el nuevo registro.")
-            return jsonify(data), 400
+            return jsonify({'ERROR': str(error)}), 400
 
+def registerAdmin():
+    if request.method == 'GET':
+        csrf_token = security.generateCSRF()
+        response = jsonify({'csrf_token': csrf_token})
 
+        response.headers['X-CSRFToken'] = csrf_token # ESTO SE SUPONE QUE GUARDA EL CSRF EN UN ENCABEZADO SIN ACCION EN EL FRONT
+        return response, 200
+    
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password =  request.form.get('password')
+        name = request.form.get('name')
+        lastname = request.form.get('lastname')
 
-# 5. Gestión de Información de Usuarios
+        # HASHEAR PASSWORD
+        password = security.hash(password)
 
-## 5.1. Obtención de Información
-def getUserProfile(userId):
-    return jsonify({"error": "Usuario no encontrado"}), 404
+        data = { #Para cada labor debe poner su precio por hora o unidad de labor.
+            'email': email,
+            'password': password,
+            'recibo_publico': '',
+            'name': name,
+            'lastname': lastname,
+            'latitud': 0,
+            'longitud': 0,
+            'foto_perfil': '',
+            'imagen_documento': '',
+            'disponibilidad': True,
+            'labor': '',
+            'precio_hora': '',
+            'telefono': ''
+        }
 
-def getProfessionalProfile(professionalId):
-    return jsonify({"error": "Profesional no encontrado"}), 404
-
-## 5.2. Actualización de Información
-def updateUserProfile(userId):
-    return jsonify({"error": "Usuario no encontrado"}), 404
-
-def updateProfessionalProfile(professionalId):
-    return jsonify({"error": "Profesional no encontrado"}), 404
+        #GUARDAR LOS DATOS EN LA DB
+        resp, error = db.add_user(data, 'Administrador')
+        if resp:
+            print("Se ha creado un nuevo registro con exito.")
+            return jsonify({'msg': 'created'}), 201
+        else:
+            print("Fallo al crear el nuevo registro.")
+            return jsonify({'ERROR': str(error)}), 400

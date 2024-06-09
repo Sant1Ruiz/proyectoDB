@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
-from db import gets as db
 from utils import wtf, security
+from db import init as db
 
 revoked_tokens = set()
 
@@ -19,7 +19,10 @@ def login():
 
         user = db.get_credentials(username)
         if user and security.verify_hash(password, user['password']):
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity=user['id'], additional_claims={
+                'username': username,
+                'rol': user['rol']
+            })
             return jsonify({'access_token': access_token}), 200
         return jsonify({'error': 'Invalid credentials'}), 401
 
