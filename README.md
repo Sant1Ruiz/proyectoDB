@@ -49,14 +49,14 @@
 ## /jobs-taked
 - **GET**: Retorna la lista de los trabajos tomados por algun profesional
 
-## /user-by-job/<JOB>
+## /user-by-job/JOB
 - **GET**: Retorna la lista a los profesionales en base a un trabajo espcificado
 
 ## /history
 - **GET**: Retorna el historial de solicitudes de una persona o trabajador
 - **NOTA**: Si eres administrador se retorna el historial de todos los usuarios
 
-## /users/<ROL>
+## /users/ROL
 - **GET**: Dependiendo del rol Retorna a todos los usuarios o trabajadores
 ### /users/administrador
 - **GET**: Retorna a todos los usuarios sin importar el rol, pero se valida que la peticion sea por un usuario administrador
