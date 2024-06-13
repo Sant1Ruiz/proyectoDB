@@ -35,11 +35,11 @@ def registerUser():
         # GUARDAR LAS IMAGENES SUBIDAS
         recibo_publico = save_image.save_image(recibo_publico, "user_RP")
 
-        #ENCRIPTANDO DATOS DE LA TARJETA
-        tipo_tarjeta = cipher.encrypt(tipo_tarjeta.encode())
-        codigo_seguridad = cipher.encrypt(codigo_seguridad.encode())
-        fecha_expiracion = cipher.encrypt(fecha_expiracion.encode())
-        numero_tarjeta = cipher.encrypt(numero_tarjeta.encode())
+        # #ENCRIPTANDO DATOS DE LA TARJETA
+        # tipo_tarjeta = cipher.encrypt(tipo_tarjeta.encode())
+        # codigo_seguridad = cipher.encrypt(codigo_seguridad.encode())
+        # fecha_expiracion = cipher.encrypt(fecha_expiracion.encode())
+        # numero_tarjeta = cipher.encrypt(numero_tarjeta.encode())
 
         # HASHEAR PASSWORD
         password = security.hash(password)

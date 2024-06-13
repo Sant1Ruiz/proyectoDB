@@ -21,7 +21,10 @@ def login():
         if user and security.verify_hash(password, user['password']):
             access_token = create_access_token(identity=user['id'], additional_claims={
                 'username': username,
-                'rol': user['rol']
+                'role': user['rol'],
+                'name': user['nombre'],
+                'lastname': user['apellido'],
+                'telefono': user['telefono'],
             })
             return jsonify({'access_token': access_token, 'role': user['rol']}), 200
         return jsonify({'error': 'Invalid credentials'}), 401

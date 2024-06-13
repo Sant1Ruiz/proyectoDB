@@ -16,7 +16,7 @@ def get_all_jobs(conn):
 def get_credentials(conn, username):
     #QUERY PARA OBTENER EL USUARIO
     cur = conn.cursor()
-    cur.execute("""SELECT u.nombre, u.password, r.nombre_rol, u.usuario_id, u.telefono, u.email
+    cur.execute("""SELECT u.nombre, u.apellido,  u.password, r.nombre_rol, u.usuario_id, u.telefono, u.email
                 FROM usuario u 
                 INNER JOIN usuariorol ur ON u.usuario_id = ur.usuario_id
                 INNER JOIN rol r ON r.rol_id = ur.rol_id
@@ -26,12 +26,14 @@ def get_credentials(conn, username):
     #print(rows)
     data = {}
     for row in rows:
-        if row[0] == username or row[4] == username or row[5] == username:
+        if row[5] == username or row[6] == username:
             data = {
-                'id': row[3],
-                'username': row[0],
-                'password': row[1],
-                'rol': row[2]
+                'id': row[4],
+                'nombre': row[0],
+                'apellido': row[1],
+                'password': row[2],
+                'rol': row[3],
+                'username': row[5],
             }
             return data
     return False

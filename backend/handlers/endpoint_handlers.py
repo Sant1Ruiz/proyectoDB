@@ -1,20 +1,24 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from db import init as db
-productos = [
-    {"id": 1, "nombre": "Producto 1", "precio": 10.99},
-    {"id": 2, "nombre": "Producto 2", "precio": 20.49}
-]
 
 @jwt_required()
 def index():
+    token = ''
+
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+
     # CUANDO SE RETORNEN LAS IMAGENES DEBEN DE SER CON LA IP DE ESTE SERVIDOR PARA QUE LAS PUEDA LINKEAR DIRECTAMENTE: http://IP/static/NOMBRE_IMAGEN
     id = get_jwt_identity()
     claims = get_jwt()
     username = claims.get('username') # Obtener el rol del usuario
     rol = claims.get('rol') # Obtener el rol del usuario
+    name = claims.get('name')
+    lastname = claims.get('lastname')
 
-    return jsonify(productos, id, username, rol)
+    return jsonify({'id': id, 'username': username, 'role': rol, 'access_token': token, 'name': name, 'lastname': lastname})
 
 # Lista los trabajos tomados por algun profesional
 @jwt_required()
