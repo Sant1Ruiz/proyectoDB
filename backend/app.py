@@ -2,15 +2,18 @@ from flask import Flask
 from routes.endpoints import api
 from flask_wtf.csrf import CSRFProtect
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from datetime import timedelta
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, supports_credentials=True)
+    # CSRFProtect(app)
+    
+    
     app.config['SECRET_KEY'] = 'asd51qds6g,-.o+ǵs51asd2s6a4342+'
 
-    csrf = CSRFProtect(app)
-    csrf.init_app(app)
 
 
     app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Cambia esta clave a una más segura

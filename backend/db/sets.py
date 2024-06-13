@@ -24,17 +24,17 @@ def add_user(conn, data, tipo_usuario):
         conn.commit()
         new_user_id = cur.fetchone()[0]
 
-        if tipo_usuario == 'Cliente':
-            values2 = (
-                data['tipo_tarjeta'],
-                data['codigo_seguridad'],
-                data['fecha_expiracion'],
-                data['numero_tarjeta'],
-            )
-            cur.execute("""INSERT INTO Tarjeta (tipo_tarjeta, codigo_seguridad, fecha_expiracion, numero_tarjeta)
-                        VALUES (%s, %s, %s, %s)""",
-                        (values2))
-        conn.commit()
+        # if tipo_usuario == 'Cliente':
+        #     values2 = (
+        #         data['tipo_tarjeta'],
+        #         data['codigo_seguridad'],
+        #         data['fecha_expiracion'],
+        #         data['numero_tarjeta'],
+        #     )
+        #     cur.execute("""INSERT INTO Tarjeta (tipo_tarjeta, codigo_seguridad, fecha_expiracion, numero_tarjeta)
+        #                 VALUES (%s, %s, %s, %s)""",
+        #                 (values2))
+        # conn.commit()
 
         #OBTENIENDO ROL ID
         cur.execute("SELECT rol_id, nombre_rol FROM rol")

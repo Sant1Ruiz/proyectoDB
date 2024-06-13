@@ -57,10 +57,10 @@ def registerUser():
             'imagen_documento': '',
             'disponibilidad': True,
 
-            'tipo_tarjeta': cipher.decrypt(tipo_tarjeta).decode(),
-            'codigo_seguridad': cipher.decrypt(codigo_seguridad).decode(),
-            'fecha_expiracion': cipher.decrypt(fecha_expiracion).decode(),
-            'numero_tarjeta': cipher.decrypt(numero_tarjeta).decode()
+            # 'tipo_tarjeta': cipher.decrypt(tipo_tarjeta).decode(),
+            # 'codigo_seguridad': cipher.decrypt(codigo_seguridad).decode(),
+            # 'fecha_expiracion': cipher.decrypt(fecha_expiracion).decode(),
+            # 'numero_tarjeta': cipher.decrypt(numero_tarjeta).decode()
         }
 
         #GUARDAR LOS DATOS EN LA DB

@@ -23,7 +23,7 @@ def login():
                 'username': username,
                 'rol': user['rol']
             })
-            return jsonify({'access_token': access_token}), 200
+            return jsonify({'access_token': access_token, 'role': user['rol']}), 200
         return jsonify({'error': 'Invalid credentials'}), 401
 
 
