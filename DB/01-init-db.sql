@@ -10,7 +10,7 @@ CREATE TABLE Usuario (
     longitud DECIMAL(9,6),
     foto_perfil VARCHAR(255),
     imagen_documento VARCHAR(255),
-    telefono VARCHAR(13),
+    telefono VARCHAR(17),
     disponibilidad BOOLEAN
 );
 
