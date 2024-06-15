@@ -33,6 +33,9 @@ def login():
                     'name': user['nombre'],
                     'lastname': user['apellido'],
                     'telefono': user['username'],
+                    'latitud': user['latitud'],
+                    'longitud': user['longitud'],
+                    'email': user['email'],
                 })
             return jsonify({'access_token': access_token, 'role': user['rol']}), 200
         return jsonify({'error': 'Invalid credentials'}), 401

@@ -17,8 +17,14 @@ def index():
     rol = claims.get('role') # Obtener el rol del usuario
     name = claims.get('name')
     lastname = claims.get('lastname')
-
-    return jsonify({'id': id, 'username': username, 'role': rol, 'access_token': token, 'name': name, 'lastname': lastname})
+    if rol == 'Administrador':
+        return jsonify({'id': id, 'username': username, 'role': rol, 'access_token': token, 'name': name, 'lastname': lastname})
+    else:
+        telefono = claims.get('telefono')
+        latitud = claims.get('latitud')
+        longitud = claims.get('longitud')
+        email = claims.get('email')
+        return jsonify({'id': id, 'username': username, 'role': rol, 'access_token': token, 'name': name, 'lastname': lastname, 'telefono': telefono, 'latitud': latitud, 'longitud': longitud, 'email': email})
 
 # Lista los trabajos tomados por algun profesional
 @jwt_required()
