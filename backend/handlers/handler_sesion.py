@@ -19,13 +19,21 @@ def login():
 
         user = db.get_credentials(username)
         if user and security.verify_hash(password, user['password']):
-            access_token = create_access_token(identity=user['id'], additional_claims={
-                'username': username,
-                'role': user['rol'],
-                'name': user['nombre'],
-                'lastname': user['apellido'],
-                'telefono': user['telefono'],
-            })
+            if user['rol'] == 'Administrador': 
+                access_token = create_access_token(identity=user['id'], additional_claims={
+                    'username': username,
+                    'role': user['rol'],
+                    'name': user['nombre'],
+                    'lastname': user['apellido'],
+                })
+            else:
+                access_token = create_access_token(identity=user['id'], additional_claims={
+                    'username': username,
+                    'role': user['rol'],
+                    'name': user['nombre'],
+                    'lastname': user['apellido'],
+                    'telefono': user['username'],
+                })
             return jsonify({'access_token': access_token, 'role': user['rol']}), 200
         return jsonify({'error': 'Invalid credentials'}), 401
 

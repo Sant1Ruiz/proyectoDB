@@ -14,7 +14,7 @@ def index():
     id = get_jwt_identity()
     claims = get_jwt()
     username = claims.get('username') # Obtener el rol del usuario
-    rol = claims.get('rol') # Obtener el rol del usuario
+    rol = claims.get('role') # Obtener el rol del usuario
     name = claims.get('name')
     lastname = claims.get('lastname')
 

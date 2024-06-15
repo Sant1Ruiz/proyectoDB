@@ -6,12 +6,12 @@ INSERT INTO Rol (nombre_rol) VALUES
 
 INSERT INTO Usuario (email, password, recibo_publico, nombre, apellido, latitud, longitud, foto_perfil, imagen_documento, telefono, disponibilidad) VALUES
 ('usuario1@email.com', 'e38ad214943daad1d64c102faec29de4afe9da3d', 'RP001', 'Juan', 'Pérez', -33.448890, -70.669265, 'perfil1.jpg', 'doc1.jpg', '1234567890', true),
-('usuario2@email.com', '2aa60a8ff7fcd473d321e0146afd9e26df395147', 'RP002', 'María', 'González', -33.450000, -70.660000, 'perfil2.jpg', 'doc2.jpg', '0987654321', false),
+('usuario2@email.com', '2aa60a8ff7fcd473d321e0146afd9e26df395147', 'RP002', 'María', 'González', 4.651265, -74.055855, 'perfil2.jpg', 'doc2.jpg', '0987654321', false),
 ('usuario3@email.com', '1119cfd37ee247357e034a08d844eea25f6fd20f', 'RP003', 'Pedro', 'Sánchez', -33.460000, -70.650000, 'perfil3.jpg', 'doc3.jpg', '1122334455', true),
-('usuario4@email.com', 'a1881c06eec96db9901c7bbfe41c42a3f08e9cb4', 'RP004', 'Ana', 'Martínez', -33.470000, -70.640000, 'perfil4.jpg', 'doc4.jpg', '5566778899', false),
+('usuario4@email.com', 'a1881c06eec96db9901c7bbfe41c42a3f08e9cb4', 'RP004', 'Ana', 'Martínez', 4.666568, -74.056714, 'perfil4.jpg', 'doc4.jpg', '5566778899', false),
 ('usuario5@email.com', 'fb209e3feaa9680e507bcb2557b76a9190426a5a', 'RP005', 'Luis', 'Rodríguez', -33.480000, -70.630000, 'perfil5.jpg', 'doc5.jpg', '9988776655', true),
 ('usuario6@email.com', '4b4b04529d87a5ca7568730533b7a0d6e0a2482d', 'RP006', 'Carmen', 'López', -33.490000, -70.620000, 'perfil6.jpg', 'doc6.jpg', '3322114455', false),
-('usuario7@email.com', 'db8e1af0cb3aca1ae2d0018624204529970560fe', 'RP007', 'Javier', 'Fernández', -33.500000, -70.610000, 'perfil7.jpg', 'doc7.jpg', '6677889900', true),
+('usuario7@email.com', 'db8e1af0cb3aca1ae2d0018624204529970560fe', 'RP007', 'Javier', 'Fernández', 4.628308, -74.064699, 'perfil7.jpg', 'doc7.jpg', '6677889900', true),
 ('usuario8@email.com', 'a5dea47281fb1c97b9306e468c1e9f7d5d0f95bb', 'RP008', 'Sofía', 'Díaz', -33.510000, -70.600000, 'perfil8.jpg', 'doc8.jpg', '1199887766', false),
 ('usuario9@email.com', 'cb4e5208b4cd87268b208e49452ed6e89a68e0b8', 'RP009', 'Diego', 'Morales', -33.520000, -70.590000, 'perfil9.jpg', 'doc9.jpg', '5544332211', true),
 ('usuario10@email.com', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', 'RP010', 'Valentina', 'Herrera', -33.530000, -70.580000, 'perfil10.jpg', 'doc10.jpg', '9911223344', false);
