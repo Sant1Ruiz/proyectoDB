@@ -21,8 +21,12 @@ def get_credentials(username):
     resp = gets.get_credentials(conn, username)
     return resp
 
-def get_jobs_taked():
-    resp = gets.get_jobs_taked(conn)
+def list_jobs_taked_details():
+    resp = gets.list_jobs_taked_details(conn)
+    return resp
+
+def list_jobs_takeds_names():
+    resp = gets.list_jobs_takeds_names(conn)
     return resp
 
 def get_all_user_for_job(job):
@@ -39,4 +43,12 @@ def get_users(rol):
 
 def add_user(data, tipo_usuario):
     resp = sets.add_user(conn, data, tipo_usuario)
+    return resp
+
+def get_star_average(id):
+    resp = gets.get_star_average(conn, id)
+    return resp
+
+def get_user_details(id):
+    resp = gets.get_user_details(conn, id)
     return resp

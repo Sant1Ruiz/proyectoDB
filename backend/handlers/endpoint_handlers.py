@@ -18,8 +18,8 @@ def index():
 
 # Lista los trabajos tomados por algun profesional
 @jwt_required()
-def list_jobs_taked():
-    jobs = db.get_jobs_taked()
+def list_jobs_taked_details():
+    jobs = db.list_jobs_taked_details()
     return jsonify(jobs)
 
 # Lista a los profesionales en base a un trabajo
@@ -64,8 +64,12 @@ def list_users(rol):
     users = db.get_users(rol)
     return jsonify(users)
 
-# lista a todos los usuarios o trabajadores en base a un filtro
-#@jwt_required()
-#def list_users_filter(type, filter):
-#    users = gets.get_users_filter(type, filter)
-#    return jsonify(users)
+@jwt_required()
+def list_jobs_takeds_names():
+    jobs = db.list_jobs_takeds_names()
+    return jsonify(jobs)
+
+@jwt_required()
+def get_user_details(id):
+    details = db.get_user_details(id)
+    return jsonify(details)

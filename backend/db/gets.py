@@ -16,32 +16,63 @@ def get_all_jobs(conn):
 def get_credentials(conn, username):
     #QUERY PARA OBTENER EL USUARIO
     cur = conn.cursor()
-    cur.execute("""SELECT u.nombre, u.password, r.nombre_rol, u.usuario_id, u.telefono, u.email
+    cur.execute("""SELECT u.nombre, u.password, r.nombre_rol, u.usuario_id, u.telefono, u.email, u.apellido, u.longitud, u.latitud
                 FROM usuario u 
                 INNER JOIN usuariorol ur ON u.usuario_id = ur.usuario_id
                 INNER JOIN rol r ON r.rol_id = ur.rol_id
-                
+
                 """)
     rows = cur.fetchall()
     #print(rows)
     data = {}
     for row in rows:
         if row[0] == username or row[4] == username or row[5] == username:
+            print(row[0])
+            print(row[4])
+            print(row[5])
+
             data = {
                 'id': row[3],
                 'username': row[0],
                 'password': row[1],
-                'rol': row[2]
+                'rol': row[2],
+                'lastname': row[6],
+                'phone': row[4],
+                'longitud': row[7],
+                'latitud': row[8],
+                'email': row[5]
             }
             return data
     return False
 
-def get_jobs_taked(conn):
-    #QUERY QUE OBTIENE SOLAMENTE LOS TRABAJOS QUE TIENEN AL MENOS UN PROFESIONAL
+def list_jobs_taked_details(conn):
+    #QUERY QUE OBTIENE SOLAMENTE LOS TRABAJOS QUE TIENEN AL MENOS UN PROFESIONAL Y SUS DETALLES
+    cur = conn.cursor()
+    cur.execute("""SELECT l.nombre_labor, l.imagen_labor, l.descripcion, COUNT(ul.usuario_id) AS cantidad_usuarios
+                FROM labor l
+                JOIN UsuarioLabor ul ON l.labor_id = ul.labor_id
+                GROUP BY 
+                    l.nombre_labor, l.imagen_labor, l.descripcion;
+                """)
+    rows = cur.fetchall()
+    data = []
+    for row in rows:
+        labor_data = {
+            'nombre': row[0],
+            'imagen': row[1],
+            'descripcion': row[2],
+            'trabajadores': row[3]
+        }
+        data.append(labor_data)
+    cur.close()
+    return data
+
+def list_jobs_takeds_names(conn):
+    #QUERY QUE OBTIENE SOLAMENTE LOS TRABAJOS QUE TIENEN AL MENOS UN PROFESIONAL SOLO NOMBRE DE LA LABOR
     cur = conn.cursor()
     cur.execute("""SELECT DISTINCT l.nombre_labor
                 FROM labor l
-                JOIN UsuarioLabor ul ON l.labor_id = ul.labor_id;
+                JOIN UsuarioLabor ul ON l.labor_id = ul.labor_id
                 """)
     rows = cur.fetchall()
     data = []
@@ -49,6 +80,7 @@ def get_jobs_taked(conn):
         data.append(row[0])
     cur.close()
     return data
+
 
 def get_all_user_for_job(conn, job):
     # QUERY QUE SELECCIONE A TODOS LOS USUARIOS EN BASE AL TRABAJO
@@ -73,12 +105,22 @@ def get_all_user_for_job(conn, job):
     #    """, (job,))    
     rows = cur.fetchall()
     data = []
+    # for row in rows:
+    #     dict_row = {}
+    #     for idx, col in enumerate(cur.description):
+    #         dict_row[col[0]] = row[idx]
+    #     data.append(dict_row)
     for row in rows:
         dict_row = {}
         for idx, col in enumerate(cur.description):
             dict_row[col[0]] = row[idx]
+        # Obtener el promedio de estrellas y agregarlo al diccionario
+        usuario_id = dict_row['usuario_id']
+        dict_row['estrellas'] = get_star_average(conn, usuario_id)
         data.append(dict_row)
+
     cur.close()
+    
     return data
 
 def get_history(conn, user):
@@ -143,10 +185,32 @@ def get_users(conn, rol):
     cur.close()
     return data
 
-#def get_users_filter(type, filter):
-#    #QUERY QUE RETORNA LOS USUARIOS QUE CUMPLAN CON EL FILTRO
-#    data = {
-#        'username': 'juanito',
-#        'job': 'cocinero'
-#    }
-#    return data
+
+def get_star_average(conn, id):
+    cur = conn.cursor()
+
+    #QUERY PARA OBTENER EL PROMEDIO DE ESTRELLAS
+
+    return 4
+
+def get_user_details(conn, id):
+    cur = conn.cursor()
+
+    cur.execute("""SELECT 
+                FROM usuario
+                WHERE usuario_id = %s
+                """, (id,))
+    rows = cur.fetchall()
+
+    data = {}
+
+    for row in rows:
+        for idx, col in enumerate(cur.description):
+            col_name = col[0]
+            if col_name not in data:
+                data[col_name] = row[idx]
+        # Obtener el promedio de estrellas y agregarlo al diccionario
+        star_avg = get_star_average(conn, id)
+        data['estrellas'] = star_avg
+
+    return data

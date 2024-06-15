@@ -15,9 +15,12 @@ api.add_url_rule('/register/administrador', 'endpoint registrar administrador', 
 api.add_url_rule('/login', 'login', handler_sesion.login, methods=['POST', 'GET'])
 api.add_url_rule('/logout', 'logout', handler_sesion.logout, methods=['GET'])
 
-api.add_url_rule('/jobs-taked', 'endpoint trabajos tomados', handler.list_jobs_taked, methods=['GET'])
-api.add_url_rule('/user-by-job/<job>', 'endpoint user by job', handler.get_professional_for_job, methods=['GET'])
+api.add_url_rule('/jobs/details', 'endpoint trabajos detalles', handler.list_jobs_taked_details, methods=['GET'])
+api.add_url_rule('/jobs/names', 'endpoint trabajos nombres', handler.list_jobs_takeds_names, methods=['GET'])
+
+api.add_url_rule('/labor/<job>', 'endpoint labor job', handler.get_professional_for_job, methods=['GET'])
 api.add_url_rule('/history', 'endpoint history', handler.list_history, methods=['GET'])
 api.add_url_rule('/users/<rol>', 'endpoint users', handler.list_users, methods=['GET'])
-#api.add_url_rule('/users-filter', 'endpoint users filter', handler.list_users_filter, methods=['GET'])
+api.add_url_rule('/verify/sesion', 'endpoint verify', handler_sesion.verify_sesion, methods=['GET'])
+api.add_url_rule('/user/<id>', 'endpoint user', handler.get_user_details, methods=['GET'])
 

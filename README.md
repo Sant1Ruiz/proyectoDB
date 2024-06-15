@@ -46,33 +46,80 @@
 - Si el usuario está logeado correctamente y el JWT sigue activo, retorna datos de prueba con el estado 200.
 - Si no se tiene acceso (es decir, si no se cuenta con el JWT o si ha vencido), retorna un JSON con la clave "msg" y distintos estados según el error.
 
-## /jobs-taked
-- **GET**: Retorna la lista de los trabajos tomados por algun profesional
+## /jobs/names
+- **GET**: Retorna la lista de los nombres de las labores tomados por algun profesional
 
-## /user-by-job/<JOB>
+## /jobs/details
+- **GET**: Retorna la lista de los detalles sobre las labores tomadas por algun profesional
+
+
+## /labor/JOB
 - **GET**: Retorna la lista a los profesionales en base a un trabajo espcificado
 
 ## /history
 - **GET**: Retorna el historial de solicitudes de una persona o trabajador
 - **NOTA**: Si eres administrador se retorna el historial de todos los usuarios
 
-## /users/<ROL>
+## /users/ROL
 - **GET**: Dependiendo del rol Retorna a todos los usuarios o trabajadores
 ### /users/administrador
 - **GET**: Retorna a todos los usuarios sin importar el rol, pero se valida que la peticion sea por un usuario administrador
 
+## /verify/sesion
+- **GET**: Verifica la validez del JWT y retorna ciertos datos dependiendo del rol de los usuarios
+
+## /user/id
+
+
+
 ## /users-filter
 - **DESACTIVADO**: Retorna a todos los usuarios o trabajadores en base a un filtro
 
-# TAREAS
-- [x] Necesitamos una ruta que liste todas las ocupaciones (las profesiones)
-- [x] Otra ruta que liste a todas las personas respecto a una ocupación en específico
-- [x] Una ruta para login
-- [x] Otra para registarse
-- [ ] Un post para hacer la solicitud de un trabajador
-- [x] Listar el historial de solicitudes de una persona
-- [x] Listar el historial de solicitudes de un trabajador
-- [x] Falta una ruta que lista a todos los usuarios
-
 # Variable de entorno
 - El archivo envEjemplo, contiene un ejemplo de la estructura del archivo .env en caso que no se quiera ejecutar la app desde el contenedor de docker
+
+# TAREAS
+- [ ] Un post para hacer la solicitud de un trabajador
+- [ ] Obtener calificaciones del trabajador
+- [x] Retornar el rol en el post del login
+- [x] Reparar login
+- [ ] Orden de aparicion de los trabajadores, labor/JOB, sacar promedio de estrellas
+
+# TAREAS DEF:
+- [x] Hacer una ruta de login, esta debe retornar el jwt_token y un objeto con los atributos más importantes de un usuario (nombre, apellido, telefono, rol) (para cliente también obtener la longitud y la latitud) (si es trabajador obtener su calificación de estrellas promedio) ( si es administraod, solo con el correo, la contraseña y el rol basta)
+- **/login** POST
+
+- [?] Hacer una ruta de registre en la cual se registre por un rol en específico. Para el rol de cliente este debe de pedir obligatoriamente una tarjeta de crédito (Añadir en la tabla Tarjeta y MetodoPago) 
+- **ESO YA ESTA, NO?**
+
+- [x] Hacer una ruta que verifique el estado de una jwt_token (Si aún es válida). Debe retornar la información del usuario dependiendo del rol como lo dije anteriormente en el login.
+- **/verify/sesion** GET
+
+- [x] Hacer una ruta de liste todas las labores de hay registrada en la base de datos y que tengan trabajadores disponibles (nombre, descripción, imagen, numero de trabajadores)
+- **/jobs/details** GET
+
+- [x] Hacer una ruta que liste los nombres de todas las labores que hay en la base de datos y que tengan trabajadores disponibles (SOLO EL NOMBRE EN UN ARRAY)
+- **/jobs/names** GET
+
+- [x] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles (/labor/<nombre_labor>) (Traer TODA la información del trabajador e incluir su promedio de estrellas)
+- **/labor/JOB** GET
+
+- [-] Hacer una ruta que obtenga la información de UN solo trabajador en base a una labor en específico (/labor/<nombre_labor>/<id_usuario>) (Traer TODA la información del trabajador)
+- **/user/ID** GET
+
+- [¿] Hacer ruta que retorne todas las solicitudes en proceso o hechas por un cliente/trabajador (/solicitud/<id_cliente> o /solicitud/<id_trabajador>) (Si es un administrador, mostrar todas las solicitudes del sistema) 
+- **YA HISTORY CUMPLE UNA FUNCION PARECIDA PERO SOLO CADA USUARIO PUEDE VER SU PROPIO HISTORIAL** GET
+
+- [ ] Hacer una ruta para hacer una solicitud a un trabajador en específico (Recuerda cambiar el valor de la disponibilidad del trabajador) (Esta vuelve a retornar la información de la solicitud registrada en la base de datos) (se debe añadir el id de la tarjeta del cliente automáticamente (Solo puede tener una tarjeta))
+- [ ] Hacer una ruta para calificar a un trajador por una solicitud en específico (/calificacion/<solicitud_id>) (Llamas la tablas de solicitudes y de ahí obtienes el id del cleinte y del trabajador) (en la petición se pondrán las estrellas que se pusieron y el comentario de la calificación, la fecha se pone automáticamente por la base de datos)
+
+
+## OPCIONALES:
+- [ ] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles y que estén cerca a una latitud y longitud específica (/labor/<nombre_labor>) (Traer TODA la información del trabajador) (Puedes usar la fórmula de la distancia Haversine para filtrar las latitudes y longitudes)
+
+## Imagenes
+Faltan imagenes de 
+- chofer
+- tutor
+- pintor
+- limpieza
