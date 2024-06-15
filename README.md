@@ -104,7 +104,7 @@
 - [x] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles (/labor/<nombre_labor>) (Traer TODA la información del trabajador e incluir su promedio de estrellas)
 - **/labor/JOB** GET
 
-- [-] Hacer una ruta que obtenga la información de UN solo trabajador en base a una labor en específico (/labor/<nombre_labor>/<id_usuario>) (Traer TODA la información del trabajador)
+- [x] Hacer una ruta que obtenga la información de UN solo trabajador en base a una labor en específico (/labor/<nombre_labor>/<id_usuario>) (Traer TODA la información del trabajador)
 - **/user/ID** GET
 
 - [¿] Hacer ruta que retorne todas las solicitudes en proceso o hechas por un cliente/trabajador (/solicitud/<id_cliente> o /solicitud/<id_trabajador>) (Si es un administrador, mostrar todas las solicitudes del sistema) 
