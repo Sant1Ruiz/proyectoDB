@@ -32,7 +32,7 @@ def login():
                     'role': user['rol'],
                     'name': user['nombre'],
                     'lastname': user['apellido'],
-                    'telefono': user['username'],
+                    'telefono': user['telefono'],
                     'latitud': user['latitud'],
                     'longitud': user['longitud'],
                     'email': user['email'],
