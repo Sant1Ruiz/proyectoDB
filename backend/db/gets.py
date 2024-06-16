@@ -1,4 +1,4 @@
-
+import psycopg2
 
 
 def get_all_jobs(conn):
@@ -13,7 +13,7 @@ def get_all_jobs(conn):
     cur.close()
     return data
 
-def get_credentials(conn, username):
+def get_credentials(conn, username, case):
     #QUERY PARA OBTENER EL USUARIO
     cur = conn.cursor()
     cur.execute("""SELECT u.nombre, u.password, r.nombre_rol, u.usuario_id, u.telefono, u.email, u.apellido, u.longitud, u.latitud
@@ -25,25 +25,43 @@ def get_credentials(conn, username):
     rows = cur.fetchall()
     #print(rows)
     data = {}
-    for row in rows:
-        if row[0] == username or row[4] == username or row[5] == username:
-            print(row[0])
-            print(row[4])
-            print(row[5])
+    if case == 'login':
+        for row in rows:
+            if row[4] == username or row[5] == username:
+                print(row[4])
+                print(row[5])
 
-            data = {
-                'id': row[3],
-                'username': row[0],
-                'password': row[1],
-                'rol': row[2],
-                'lastname': row[6],
-                'phone': row[4],
-                'longitud': row[7],
-                'latitud': row[8],
-                'email': row[5]
-            }
-            return data
-    return False
+                data = {
+                    'id': row[3],
+                    'username': row[0],
+                    'password': row[1],
+                    'rol': row[2],
+                    'lastname': row[6],
+                    'phone': row[4],
+                    'longitud': row[7],
+                    'latitud': row[8],
+                    'email': row[5]
+                }
+                return True, data
+    else:
+        for row in rows:
+            if row[3] == username:
+                print(row[4])
+                print(row[5])
+
+                data = {
+                    'id': row[3],
+                    'username': row[0],
+                    'password': row[1],
+                    'rol': row[2],
+                    'lastname': row[6],
+                    'phone': row[4],
+                    'longitud': row[7],
+                    'latitud': row[8],
+                    'email': row[5]
+                }
+                return True, data
+    return False, 'No se encontro ningun usuario que coincida'
 
 def list_jobs_taked_details(conn):
     #QUERY QUE OBTIENE SOLAMENTE LOS TRABAJOS QUE TIENEN AL MENOS UN PROFESIONAL Y SUS DETALLES
@@ -85,31 +103,15 @@ def list_jobs_takeds_names(conn):
 def get_all_user_for_job(conn, job):
     # QUERY QUE SELECCIONE A TODOS LOS USUARIOS EN BASE AL TRABAJO
     cur = conn.cursor()
-    job = job.title()
+    job = job.lower()
     cur.execute("""SELECT u.*
                 FROM Usuario u
                 JOIN UsuarioLabor ul ON u.usuario_id = ul.usuario_id
                 JOIN Labor l ON ul.labor_id = l.labor_id
-                WHERE l.nombre_labor = %s;
+                WHERE LOWER(l.nombre_labor) = %s;
                 """, (job,))
-    #cur.execute("""
-    #    SELECT u.*, c.*, ul.precio_hora, l.*
-    #    FROM usuario u 
-    #    JOIN solicitud s ON u.usuario_id = s.usuario_id 
-    #    JOIN calificacion c ON c.solicitud_id = s.solicitud_id
-    #    JOIN usuariolabor ul ON ul.usuario_id  = u.usuario_id
-    #    JOIN labor l ON l.labor_id = ul.labor_id 
-    #    WHERE l.nombre_labor = %s
-    #    ORDER BY c.estrellas DESC, ul.precio_hora DESC 
-    #    
-    #    """, (job,))    
     rows = cur.fetchall()
     data = []
-    # for row in rows:
-    #     dict_row = {}
-    #     for idx, col in enumerate(cur.description):
-    #         dict_row[col[0]] = row[idx]
-    #     data.append(dict_row)
     for row in rows:
         dict_row = {}
         for idx, col in enumerate(cur.description):
@@ -185,18 +187,28 @@ def get_users(conn, rol):
     cur.close()
     return data
 
-
+# para obtener el promedio de estrellas de un usuario en base a su usuario_labor_id
 def get_star_average(conn, id):
     cur = conn.cursor()
 
-    #QUERY PARA OBTENER EL PROMEDIO DE ESTRELLAS
+    query = """
+        SELECT AVG(c.estrellas) 
+        FROM Calificacion c
+        JOIN Solicitud s ON c.solicitud_id = s.solicitud_id
+        WHERE s.usuario_labor_id = %s;
+    """
+    cur.execute(query, (id,))
+    result = cur.fetchone()
+    
+    cur.close()
+    
+    return result[0] if result[0] is not None else 0
 
-    return 4
-
+# Obtiene el usuario por su id con sus detalles completos
 def get_user_details(conn, id):
     cur = conn.cursor()
 
-    cur.execute("""SELECT 
+    cur.execute("""SELECT *
                 FROM usuario
                 WHERE usuario_id = %s
                 """, (id,))
@@ -213,4 +225,65 @@ def get_user_details(conn, id):
         star_avg = get_star_average(conn, id)
         data['estrellas'] = star_avg
 
+    return data
+
+# Obtiene el rol del id del usuario
+def get_rol(conn, id):
+    cur = conn.cursor()
+    try:    
+        cur.execute("""SELECT r.nombre_rol
+                    FROM usuario u 
+                    INNER JOIN usuariorol ur ON u.usuario_id = ur.usuario_id
+                    INNER JOIN rol r ON r.rol_id = ur.rol_id
+                    WHERE u.usuario_id = %s
+                    """, (id,))
+        rol = cur.fetchone()[0]
+        return rol
+    except  (Exception, psycopg2.Error) as e:
+        print(f"Error al crear cursor: {e}")
+        return False
+    finally:
+        if cur:
+            cur.close()
+    
+
+# Obtiene las solicitudes hechas o recibidas de un cliente o de un trabajador
+def get_solicitud(conn, id):
+    cur = conn.cursor()
+    rol = get_rol(conn, id)
+
+# SELECT s.*
+# FROM calificacion c
+# JOIN Solicitud s ON c.solicitud_id = s.solicitud_id
+# WHERE s.usuario_id = %s
+
+    if not rol:
+        return {'error': 'No se encontro el usuario'}
+    elif rol == 'Cliente':
+        cur.execute("""SELECT s.*
+                    FROM solicitud s
+                    WHERE s.usuario_id = %s
+                    """, (id,))
+    elif rol == 'Trabajador':
+        cur.execute("""SELECT s.*
+                    FROM solicitud s
+                    WHERE s.usuario_labor_id = %s
+                    """, (id,))
+    elif rol == 'Administrador':
+        print("El id es de un administrador")
+        cur.close()
+        return {'error': 'El id es de un administrador'}
+    else:
+        print("No se reconoce el rol del usuario")
+        cur.close()
+        return {'error': 'No se reconoce el rol del usuario'}
+
+    rows = cur.fetchall()
+    data = []
+    for row in rows:
+        dict_row = {}
+        for idx, col in enumerate(cur.description):
+            dict_row[col[0]] = row[idx]
+        data.append(dict_row)
+    cur.close()
     return data

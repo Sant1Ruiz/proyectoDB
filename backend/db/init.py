@@ -17,8 +17,8 @@ def get_all_jobs():
     resp = gets.get_all_jobs(conn)
     return resp
 
-def get_credentials(username):
-    resp = gets.get_credentials(conn, username)
+def get_credentials(username, case):
+    resp = gets.get_credentials(conn, username, case)
     return resp
 
 def list_jobs_taked_details():
@@ -51,4 +51,16 @@ def get_star_average(id):
 
 def get_user_details(id):
     resp = gets.get_user_details(conn, id)
+    return resp
+
+def get_solicitud(id):
+    resp =  gets.get_solicitud(conn, id)
+    return resp
+
+def add_solicitud(fecha, descripcion, trabajador_id, cliente_id):
+    resp = sets.add_solicitud(conn, fecha, descripcion, trabajador_id, cliente_id)
+    return resp
+
+def add_rating(estrellas, comentario, fecha, solicitud_id, id_cliente):
+    resp =  sets.add_rating(conn, estrellas, comentario, fecha, solicitud_id, id_cliente)
     return resp

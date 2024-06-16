@@ -3,7 +3,6 @@ from utils.wtf import UserForm
 from utils import security, save_image
 from db import init as db
 
-WTF_CSRF_ENABLED = False #DESACTIVA CSRF
 
 cipher = security.load_cipher()
 
@@ -57,10 +56,15 @@ def registerUser():
             'imagen_documento': '',
             'disponibilidad': True,
 
-            'tipo_tarjeta': cipher.decrypt(tipo_tarjeta).decode(),
-            'codigo_seguridad': cipher.decrypt(codigo_seguridad).decode(),
-            'fecha_expiracion': cipher.decrypt(fecha_expiracion).decode(),
-            'numero_tarjeta': cipher.decrypt(numero_tarjeta).decode()
+            # 'tipo_tarjeta': cipher.decrypt(tipo_tarjeta).decode(),
+            # 'codigo_seguridad': cipher.decrypt(codigo_seguridad).decode(),
+            # 'fecha_expiracion': cipher.decrypt(fecha_expiracion).decode(),
+            # 'numero_tarjeta': cipher.decrypt(numero_tarjeta).decode()
+
+            'tipo_tarjeta': tipo_tarjeta,
+            'codigo_seguridad': codigo_seguridad,
+            'fecha_expiracion': fecha_expiracion,
+            'numero_tarjeta': numero_tarjeta
         }
 
         #GUARDAR LOS DATOS EN LA DB

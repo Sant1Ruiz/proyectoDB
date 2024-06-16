@@ -1,20 +1,16 @@
-from flask import Flask, jsonify
+from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from db import init as db
-productos = [
-    {"id": 1, "nombre": "Producto 1", "precio": 10.99},
-    {"id": 2, "nombre": "Producto 2", "precio": 20.49}
-]
+from datetime import date
 
 @jwt_required()
 def index():
-    # CUANDO SE RETORNEN LAS IMAGENES DEBEN DE SER CON LA IP DE ESTE SERVIDOR PARA QUE LAS PUEDA LINKEAR DIRECTAMENTE: http://IP/static/NOMBRE_IMAGEN
     id = get_jwt_identity()
     claims = get_jwt()
     username = claims.get('username') # Obtener el rol del usuario
     rol = claims.get('rol') # Obtener el rol del usuario
 
-    return jsonify(productos, id, username, rol)
+    return jsonify(id, username, rol)
 
 # Lista los trabajos tomados por algun profesional
 @jwt_required()
@@ -73,3 +69,64 @@ def list_jobs_takeds_names():
 def get_user_details(id):
     details = db.get_user_details(id)
     return jsonify(details)
+
+@jwt_required()
+def get_solicitud(id):
+    solcitudes = db.get_solicitud(id)
+    return jsonify(solcitudes)
+
+@jwt_required()
+def generate_solictud():
+    # FECHA AAAA-MM-DD -> Lo genero yo datetime
+    # Descripcion - request
+    # Cliente -> tmbn obtner su tarjeta - request
+    # Trabajador -> Cambiar disponibilidad - request
+    # Labor -> Lo obtengo del trabajador
+    # TarjetaID -> Lo obtengo del cliente
+    claims = get_jwt()
+    rol = claims.get('rol')
+
+    if rol == 'Cliente':
+        fecha = date.today()
+        descripcion = request.form.get('descripcion')
+        trabajador_id = request.form.get('trabajador_id')
+        if descripcion is not None and trabajador_id is not None:
+            cliente_id = get_jwt_identity()
+            state, data = db.add_solicitud(fecha, descripcion, trabajador_id, cliente_id)
+            if state:
+                return jsonify(data)
+            else:
+                return jsonify({'error': f'{data}'})
+        else:
+            print("Error: descripcion o trabajador_id has not provided")
+            return jsonify({'error': 'descripcion o trabajador_id has not provided'})
+    else:
+        print(f"Un {rol} no puede generar solicitudes, solo clientes")
+        return jsonify({'error': f"Un {rol} no puede generar solicitudes, solo clientes"}), 400
+
+
+@jwt_required()
+def add_calificacion(solicitud_id):
+    claims = get_jwt()
+    rol = claims.get('rol')
+
+    if rol == 'Cliente':
+        fecha =  date.today()
+        estrellas = request.form.get('estrellas')
+        comentario = request.form.get('comentario')
+        if estrellas is not None and comentario is not None:
+
+            id_cliente = get_jwt_identity()
+
+            state, data = db.add_rating(estrellas, comentario, fecha, solicitud_id, id_cliente)
+            if state:
+                return jsonify(data)
+            else:
+                return jsonify({'error': f'{data}'})
+        else:
+            print("Error: estrellas o comentario has not provided")
+            return jsonify({'error': 'estrellas o comentario has not provided'})            
+
+    else:
+        print(f"Un {rol} no puede calificar solicitudes, solo clientes")
+        return jsonify({'error': f"Un {rol} no puede calificar solicitudes, solo clientes"}), 400

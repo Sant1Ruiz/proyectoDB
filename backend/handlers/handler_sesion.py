@@ -9,16 +9,15 @@ revoked_tokens = set()
 @jwt_required()
 def verify_sesion():
     id = get_jwt_identity()
-    claims = get_jwt()
-    username = claims.get('username') # Obtener el rol del usuario
-    rol = claims.get('rol') # Obtener el rol del usuario
-    user = db.get_credentials(username)
+    state, user = db.get_credentials(id, 'verify')
 
+    if not state:
+        return jsonify({'error': f'{user}'})
     if user['rol'] == 'Cliente':
-        return jsonify({'id': user['id'], 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'longitud': user['longitud'], 'latitud': user['latitud']}), 200
+        return jsonify({'id': user['id'], 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'longitud': user['longitud'], 'latitud': user['latitud'], 'email': user['email']}), 200
     elif user['rol'] == 'Trabajador':
         stars = db.get_star_average(user['id'])
-        return jsonify({'id': user['id'], 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'star': stars}), 200
+        return jsonify({'id': user['id'], 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'star': stars, 'email': user['email']}), 200
     elif user['rol'] == 'Administrador':
         return jsonify({'id': user['id'], 'name': user['username'], 'lastname': user['lastname'], 'email': user['email'], 'rol': user['rol']}), 200
     else:
@@ -45,11 +44,12 @@ def login():
             return jsonify({'error': 'password has not provided'}), 401
         
         else:
-            user = db.get_credentials(username)
+            state, user = db.get_credentials(username, 'login')
             if user and security.verify_hash(password, user['password']):
                 access_token = create_access_token(identity=user['id'], additional_claims={
                     'username': user['username'],
-                    'rol': user['rol']
+                    'rol': user['rol'],
+                    'email': user['email']
                 })
                 if user['rol'] == 'Cliente':
                     return jsonify({'access_token': access_token, 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'longitud': user['longitud'], 'latitud': user['latitud']}), 200

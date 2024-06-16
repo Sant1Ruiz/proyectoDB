@@ -88,38 +88,48 @@
 # TAREAS DEF:
 - [x] Hacer una ruta de login, esta debe retornar el jwt_token y un objeto con los atributos más importantes de un usuario (nombre, apellido, telefono, rol) (para cliente también obtener la longitud y la latitud) (si es trabajador obtener su calificación de estrellas promedio) ( si es administraod, solo con el correo, la contraseña y el rol basta)
 - **/login** POST
+<br>
 
 - [?] Hacer una ruta de registre en la cual se registre por un rol en específico. Para el rol de cliente este debe de pedir obligatoriamente una tarjeta de crédito (Añadir en la tabla Tarjeta y MetodoPago) 
 - **ESO YA ESTA, NO?**
+<br>
 
 - [x] Hacer una ruta que verifique el estado de una jwt_token (Si aún es válida). Debe retornar la información del usuario dependiendo del rol como lo dije anteriormente en el login.
 - **/verify/sesion** GET
+<br>
 
 - [x] Hacer una ruta de liste todas las labores de hay registrada en la base de datos y que tengan trabajadores disponibles (nombre, descripción, imagen, numero de trabajadores)
 - **/jobs/details** GET
+<br>
 
 - [x] Hacer una ruta que liste los nombres de todas las labores que hay en la base de datos y que tengan trabajadores disponibles (SOLO EL NOMBRE EN UN ARRAY)
 - **/jobs/names** GET
+<br>
 
 - [x] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles (/labor/<nombre_labor>) (Traer TODA la información del trabajador e incluir su promedio de estrellas)
 - **/labor/JOB** GET
+<br>
 
 - [x] Hacer una ruta que obtenga la información de UN solo trabajador en base a una labor en específico (/labor/<nombre_labor>/<id_usuario>) (Traer TODA la información del trabajador)
 - **/user/ID** GET
+<br>
 
-- [¿] Hacer ruta que retorne todas las solicitudes en proceso o hechas por un cliente/trabajador (/solicitud/<id_cliente> o /solicitud/<id_trabajador>) (Si es un administrador, mostrar todas las solicitudes del sistema) 
-- **YA HISTORY CUMPLE UNA FUNCION PARECIDA PERO SOLO CADA USUARIO PUEDE VER SU PROPIO HISTORIAL** GET
+- [x] Hacer ruta que retorne todas las solicitudes en proceso o hechas por un cliente/trabajador (/solicitud/<id_cliente> o /solicitud/<id_trabajador>) (Si es un administrador, mostrar todas las solicitudes del sistema) 
+- **/solicitud/ID** GET
+- **/history** GET, retorna todas las solicutudes, solo para administradores, si no es administrador retornara el historial de dicho usuario
+<br>
 
-- [ ] Hacer una ruta para hacer una solicitud a un trabajador en específico (Recuerda cambiar el valor de la disponibilidad del trabajador) (Esta vuelve a retornar la información de la solicitud registrada en la base de datos) (se debe añadir el id de la tarjeta del cliente automáticamente (Solo puede tener una tarjeta))
-- [ ] Hacer una ruta para calificar a un trajador por una solicitud en específico (/calificacion/<solicitud_id>) (Llamas la tablas de solicitudes y de ahí obtienes el id del cleinte y del trabajador) (en la petición se pondrán las estrellas que se pusieron y el comentario de la calificación, la fecha se pone automáticamente por la base de datos)
+- [x] Hacer una ruta para hacer una solicitud a un trabajador en específico (Recuerda cambiar el valor de la disponibilidad del trabajador) (Esta vuelve a retornar la información de la solicitud registrada en la base de datos) (se debe añadir el id de la tarjeta del cliente automáticamente (Solo puede tener una tarjeta))
+- **/solicitud/add** POST
+- Este endpoint espera un DATAFORM(**descripcion**, **trabajador_id**), y este endpoint solo funciona si el usuario es un Cliente
+- Retorna los datos añadidos la clave es el nombre de las columnas de la base de datos
+<br>
 
+- [x] Hacer una ruta para calificar a un trajador por una solicitud en específico (/calificacion/<solicitud_id>) (Llamas la tablas de solicitudes y de ahí obtienes el id del cleinte y del trabajador) (en la petición se pondrán las estrellas que se pusieron y el comentario de la calificación, la fecha se pone automáticamente por la base de datos)
+- **/calificacion/SOLICITUD_ID** POST
+- Este endpoint espera un DATAFORM(**estrellas**, **comentario**), este endpoint solo funciona si la persona que califica es el cliente de aquella solicitud
+<br>
 
 ## OPCIONALES:
 - [ ] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles y que estén cerca a una latitud y longitud específica (/labor/<nombre_labor>) (Traer TODA la información del trabajador) (Puedes usar la fórmula de la distancia Haversine para filtrar las latitudes y longitudes)
-
-## Imagenes
-Faltan imagenes de 
-- chofer
-- tutor
-- pintor
-- limpieza
+<br>

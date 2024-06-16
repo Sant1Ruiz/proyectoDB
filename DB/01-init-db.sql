@@ -1,6 +1,6 @@
 CREATE TABLE Usuario (
     usuario_id SERIAL PRIMARY KEY,
-    email VARCHAR(350) NOT NULL,
+    email VARCHAR(350) NOT NULL UNIQUE,
     password VARCHAR(350) NOT NULL,
     recibo_publico VARCHAR(255),
     nombre VARCHAR(100) NOT NULL,
@@ -9,13 +9,13 @@ CREATE TABLE Usuario (
     longitud DECIMAL(9,6),
     foto_perfil VARCHAR(255),
     imagen_documento VARCHAR(255),
-    telefono VARCHAR(13),
-    disponibilidad BOOLEAN
+    telefono VARCHAR(14) UNIQUE,
+    disponibilidad BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE Rol (
     rol_id SERIAL PRIMARY KEY,
-    nombre_rol VARCHAR(50) NOT NULL
+    nombre_rol VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE UsuarioRol (
@@ -28,11 +28,11 @@ CREATE TABLE UsuarioRol (
 
 CREATE TABLE Tarjeta (
     tarjeta_id SERIAL PRIMARY KEY,
-    tipo_tarjeta VARCHAR(50) NOT NULL,
-    codigo_seguridad VARCHAR(10) NOT NULL,
-    fecha_expiracion DATE NOT NULL,
-    numero_tarjeta VARCHAR(20) NOT NULL,
-    titular_id INT,
+    tipo_tarjeta VARCHAR(255) NOT NULL,
+    codigo_seguridad VARCHAR(255) NOT NULL,
+    fecha_expiracion VARCHAR(255) NOT NULL,
+    numero_tarjeta VARCHAR(255) NOT NULL,
+    titular_id INT NOT NULL UNIQUE,
     FOREIGN KEY (titular_id) REFERENCES Usuario(usuario_id)
 );
 
@@ -71,6 +71,6 @@ CREATE TABLE Calificacion (
     estrellas INT NOT NULL,
     comentario TEXT,
     fecha_calificacion DATE NOT NULL DEFAULT NOW(),
-    solicitud_id INT NOT NULL,
+    solicitud_id INT NOT NULL UNIQUE,
     FOREIGN KEY (solicitud_id) REFERENCES Solicitud(solicitud_id)
 );
