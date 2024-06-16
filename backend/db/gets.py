@@ -252,21 +252,19 @@ def get_solicitud(conn, id):
     cur = conn.cursor()
     rol = get_rol(conn, id)
 
-# SELECT s.*
-# FROM calificacion c
-# JOIN Solicitud s ON c.solicitud_id = s.solicitud_id
-# WHERE s.usuario_id = %s
 
     if not rol:
         return {'error': 'No se encontro el usuario'}
     elif rol == 'Cliente':
-        cur.execute("""SELECT s.*
+        cur.execute("""SELECT s.*, t.tipo_tarjeta, t.numero_tarjeta
                     FROM solicitud s
+                    JOIN tarjeta t ON s.tarjeta_id = t.tarjeta_id
                     WHERE s.usuario_id = %s
                     """, (id,))
     elif rol == 'Trabajador':
-        cur.execute("""SELECT s.*
+        cur.execute("""SELECT s.*, t.tipo_tarjeta, t.numero_tarjeta
                     FROM solicitud s
+                    JOIN tarjeta t ON s.tarjeta_id = t.tarjeta_id
                     WHERE s.usuario_labor_id = %s
                     """, (id,))
     elif rol == 'Administrador':

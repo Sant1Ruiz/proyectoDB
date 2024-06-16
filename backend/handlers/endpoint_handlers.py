@@ -2,7 +2,7 @@ from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from db import init as db
 from datetime import date
-
+from utils import calc_distance, security
 @jwt_required()
 def index():
     id = get_jwt_identity()
@@ -18,10 +18,21 @@ def list_jobs_taked_details():
     jobs = db.list_jobs_taked_details()
     return jsonify(jobs)
 
-# Lista a los profesionales en base a un trabajo
+# Lista a los profesionales en base a un trabajo ordenado por distancia | si es admin no ordena
 @jwt_required()
 def get_professional_for_job(job):
+    claims = get_jwt()
+    latitud_cliente = float(claims.get('latitud'))
+    longitud_cliente = float(claims.get('longitud'))
     professionals = db.get_all_user_for_job(job)
+    
+    #AÑADO LA DISTANCIA
+    for professional in professionals:
+        distancia = calc_distance.haversine(latitud_cliente, longitud_cliente, professional['latitud'], professional['longitud'])
+        professional['distancia'] = distancia
+
+    # ORDERNO POR DISTANCIA
+    professionals.sort(key=lambda x: x['distancia'])
     return jsonify(professionals)
 
 # Listar el historial de solicitudes de una persona o trabajador
@@ -73,6 +84,11 @@ def get_user_details(id):
 @jwt_required()
 def get_solicitud(id):
     solcitudes = db.get_solicitud(id)
+    cipher = security.load_cipher()
+    for solicitud in solcitudes:
+        solicitud['tipo_tarjeta'] = cipher.decrypt(solicitud['tipo_tarjeta']).decode()
+        solicitud['numero_tarjeta'] = cipher.decrypt(solicitud['numero_tarjeta']).decode()
+    
     return jsonify(solcitudes)
 
 @jwt_required()

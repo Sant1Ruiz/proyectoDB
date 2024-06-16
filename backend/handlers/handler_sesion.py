@@ -49,7 +49,9 @@ def login():
                 access_token = create_access_token(identity=user['id'], additional_claims={
                     'username': user['username'],
                     'rol': user['rol'],
-                    'email': user['email']
+                    'email': user['email'],
+                    'latitud': user['latitud'],
+                    'longitud': user['longitud']
                 })
                 if user['rol'] == 'Cliente':
                     return jsonify({'access_token': access_token, 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'longitud': user['longitud'], 'latitud': user['latitud']}), 200
