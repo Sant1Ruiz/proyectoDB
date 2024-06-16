@@ -79,11 +79,11 @@
 - El archivo envEjemplo, contiene un ejemplo de la estructura del archivo .env en caso que no se quiera ejecutar la app desde el contenedor de docker
 
 # TAREAS
-- [ ] Un post para hacer la solicitud de un trabajador
-- [ ] Obtener calificaciones del trabajador
+- [x] Un post para hacer la solicitud de un trabajador
+- [x] Obtener calificaciones del trabajador
 - [x] Retornar el rol en el post del login
 - [x] Reparar login
-- [ ] Orden de aparicion de los trabajadores, labor/JOB, sacar promedio de estrellas
+- [x] Orden de aparicion de los trabajadores, labor/JOB, sacar promedio de estrellas
 
 # TAREAS DEF:
 - [x] Hacer una ruta de login, esta debe retornar el jwt_token y un objeto con los atributos más importantes de un usuario (nombre, apellido, telefono, rol) (para cliente también obtener la longitud y la latitud) (si es trabajador obtener su calificación de estrellas promedio) ( si es administraod, solo con el correo, la contraseña y el rol basta)
@@ -131,5 +131,5 @@
 <br>
 
 ## OPCIONALES:
-- [ ] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles y que estén cerca a una latitud y longitud específica (/labor/<nombre_labor>) (Traer TODA la información del trabajador) (Puedes usar la fórmula de la distancia Haversine para filtrar las latitudes y longitudes)
+- [x] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles y que estén cerca a una latitud y longitud específica (/labor/<nombre_labor>) (Traer TODA la información del trabajador) (Puedes usar la fórmula de la distancia Haversine para filtrar las latitudes y longitudes)
 <br>

@@ -32,7 +32,7 @@ def get_professional_for_job(job):
         professional['distancia'] = distancia
 
     # ORDERNO POR DISTANCIA
-    professionals.sort(key=lambda x: x['distancia'])
+    professionals.sort(key=lambda x: (-x['estrellas'], x['distancia'], x['precio_hora']))
     return jsonify(professionals)
 
 # Listar el historial de solicitudes de una persona o trabajador

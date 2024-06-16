@@ -104,7 +104,7 @@ def get_all_user_for_job(conn, job):
     # QUERY QUE SELECCIONE A TODOS LOS USUARIOS EN BASE AL TRABAJO
     cur = conn.cursor()
     job = job.lower()
-    cur.execute("""SELECT u.*
+    cur.execute("""SELECT u.*, ul.precio_hora
                 FROM Usuario u
                 JOIN UsuarioLabor ul ON u.usuario_id = ul.usuario_id
                 JOIN Labor l ON ul.labor_id = l.labor_id
@@ -208,9 +208,11 @@ def get_star_average(conn, id):
 def get_user_details(conn, id):
     cur = conn.cursor()
 
-    cur.execute("""SELECT *
-                FROM usuario
-                WHERE usuario_id = %s
+    cur.execute("""SELECT u.*, r.nombre_rol
+                FROM usuario u
+                JOIN usuariorol ur ON u.usuario_id = ur.usuario_id
+                JOIN rol r ON ur.rol_id = r.rol_id
+                WHERE u.usuario_id = %s
                 """, (id,))
     rows = cur.fetchall()
 
@@ -224,6 +226,15 @@ def get_user_details(conn, id):
         # Obtener el promedio de estrellas y agregarlo al diccionario
         star_avg = get_star_average(conn, id)
         data['estrellas'] = star_avg
+
+    if data['nombre_rol'] == 'Trabajador':
+        cur.execute("""SELECT l.nombre_labor 
+                    FROM usuariolabor ul
+                    JOIN labor l ON ul.labor_id = l.labor_id
+                    WHERE ul.usuario_id = %s""",
+                    (data['usuario_id'],))
+        labor = cur.fetchone()[0]
+        data['labor'] = labor
 
     return data
 
