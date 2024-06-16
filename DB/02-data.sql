@@ -23,30 +23,30 @@ VALUES ('cliente4@example.com', 'password8', '159753684', 'Sofía', 'Moreno', 3.
 INSERT INTO Usuario (email, password, recibo_publico, nombre, apellido, latitud, longitud, foto_perfil, imagen_documento, telefono, disponibilidad)
 VALUES ('trabajador3@example.com', 'password9', NULL, 'Carlos', 'Gutiérrez', 3.389154, -76.524673, '/static/default/perfil3.jpg', 'documento3.pdf', '3209876543', true);
 INSERT INTO Usuario (email, password, recibo_publico, nombre, apellido, latitud, longitud, foto_perfil, imagen_documento, telefono, disponibilidad)
-VALUES ('trabajador4@example.com', 'password10', NULL, 'Valentina', 'Díaz', 3.442381, -76.498265, '/static/default/perfil4.jpg', 'documento4.pdf', '3105647382', false);
+VALUES ('trabajador4@example.com', 'password10', NULL, 'Valentina', 'Díaz', 3.442381, -76.498265, '/static/default/perfil4.png', 'documento4.pdf', '3105647382', false);
 
 INSERT INTO Usuario (email, password, recibo_publico, nombre, apellido, latitud, longitud, foto_perfil, imagen_documento, telefono, disponibilidad)
 VALUES 
 ('cliente5@example.com', 'password11', '123123123', 'Andrea', 'Lopez', 3.451176, -76.532850, NULL, NULL, '3001111111', true),
 ('cliente6@example.com', 'password12', '321321321', 'Miguel', 'Cruz', 3.374262, -76.522603, NULL, NULL, '3002222222', true),
-('trabajador5@example.com', 'password13', NULL, 'Diego', 'Ramirez', 3.427275, -76.509667, '/static/default/perfil5.jpg', 'documento5.pdf', '3003333333', true),
-('trabajador6@example.com', 'password14', NULL, 'Sara', 'Hernandez', 3.398667, -76.541334, '/static/default/perfil6.jpg', 'documento6.pdf', '3004444444', false),
+('trabajador5@example.com', 'password13', NULL, 'Diego', 'Ramirez', 3.427275, -76.509667, '/static/default/perfil5.png', 'documento5.pdf', '3003333333', true),
+('trabajador6@example.com', 'password14', NULL, 'Sara', 'Hernandez', 3.398667, -76.541334, '/static/default/perfil6.png', 'documento6.pdf', '3004444444', false),
 ('admin3@example.com', 'password15', NULL, 'Luis', 'Garcia', NULL, NULL, NULL, NULL, NULL, NULL),
 ('admin4@example.com', 'password16', NULL, 'Elena', 'Ruiz', NULL, NULL, NULL, NULL, NULL, NULL),
 ('cliente7@example.com', 'password17', '741741741', 'David', 'Martinez', 3.366592, -76.539881, NULL, NULL, '3101111111', true),
 ('cliente8@example.com', 'password18', '951951951', 'Laura', 'Diaz', 3.415827, -76.491132, NULL, NULL, '3102222222', true),
-('trabajador7@example.com', 'password19', NULL, 'Jorge', 'Gutierrez', 3.389254, -76.524773, '/static/default/perfil7.jpg', 'documento7.pdf', '3201111111', true),
-('trabajador8@example.com', 'password20', NULL, 'Carolina', 'Diaz', 3.442481, -76.498365, '/static/default/perfil8.jpg', 'documento8.pdf', '3103333333', false),
+('trabajador7@example.com', 'password19', NULL, 'Jorge', 'Gutierrez', 3.389254, -76.524773, '/static/default/perfil7.png', 'documento7.pdf', '3201111111', true),
+('trabajador8@example.com', 'password20', NULL, 'Carolina', 'Diaz', 3.442481, -76.498365, '/static/default/perfil8.png', 'documento8.pdf', '3103333333', false),
 ('cliente9@example.com', 'password21', '852852852', 'Carlos', 'Ortiz', 3.401776, -76.533850, NULL, NULL, '3005555555', true),
 ('cliente10@example.com', 'password22', '753753753', 'Camila', 'Jimenez', 3.422162, -76.523503, NULL, NULL, '3006666666', true),
-('trabajador9@example.com', 'password23', NULL, 'Mario', 'Vega', 3.435175, -76.511567, '/static/default/perfil9.jpg', 'documento9.pdf', '3007777777', true),
-('trabajador10@example.com', 'password24', NULL, 'Lucia', 'Santos', 3.396567, -76.543234, '/static/default/perfil10.jpg', 'documento10.pdf', '3008888888', false),
+('trabajador9@example.com', 'password23', NULL, 'Mario', 'Vega', 3.435175, -76.511567, '/static/default/perfil9.png', 'documento9.pdf', '3007777777', true),
+('trabajador10@example.com', 'password24', NULL, 'Lucia', 'Santos', 3.396567, -76.543234, '/static/default/perfil10.png', 'documento10.pdf', '3008888888', false),
 ('admin5@example.com', 'password25', NULL, 'Jose', 'Luna', NULL, NULL, NULL, NULL, NULL, NULL),
 ('admin6@example.com', 'password26', NULL, 'Ana', 'Marin', NULL, NULL, NULL, NULL, NULL, NULL),
 ('cliente11@example.com', 'password27', '963963963', 'Andres', 'Castro', 3.376492, -76.540781, NULL, NULL, '3103334444', true),
 ('cliente12@example.com', 'password28', '159159159', 'Isabella', 'Ramos', 3.426927, -76.492032, NULL, NULL, '3104445556', true),
-('trabajador11@example.com', 'password29', NULL, 'Javier', 'Mendez', 3.387154, -76.525673, '/static/default/perfil11.jpg', 'documento11.pdf', '3203334444', true),
-('trabajador12@example.com', 'password30', NULL, 'Valeria', 'Cruz', 3.445381, -76.499265, '/static/default/perfil12.jpg', 'documento12.pdf', '3104445555', false);
+('trabajador11@example.com', 'password29', NULL, 'Javier', 'Mendez', 3.387154, -76.525673, '/static/default/perfil11.png', 'documento11.pdf', '3203334444', true),
+('trabajador12@example.com', 'password30', NULL, 'Valeria', 'Cruz', 3.445381, -76.499265, '/static/default/perfil12.png', 'documento12.pdf', '3104445555', false);
 
 
 -- Tabla UsuarioRol
