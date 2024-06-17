@@ -54,12 +54,12 @@ def login():
                     'longitud': user['longitud']
                 })
                 if user['rol'] == 'Cliente':
-                    return jsonify({'access_token': access_token, 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'longitud': user['longitud'], 'latitud': user['latitud']}), 200
+                    return jsonify({'access_token': access_token, 'id': user['id'], 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'longitud': user['longitud'], 'latitud': user['latitud']}), 200
                 elif user['rol'] == 'Trabajador':
                     stars = db.get_star_average(user['id'])
-                    return jsonify({'access_token': access_token, 'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'star': stars}), 200
+                    return jsonify({'access_token': access_token, 'id': user['id'],'name': user['username'], 'lastname': user['lastname'], 'phone': user['phone'], 'rol': user['rol'], 'star': stars}), 200
                 elif user['rol'] == 'Administrador':
-                    return jsonify({'access_token': access_token, 'name': user['username'], 'lastname': user['lastname'], 'email': user['email'], 'rol': user['rol']}), 200
+                    return jsonify({'access_token': access_token, 'id': user['id'],'name': user['username'], 'lastname': user['lastname'], 'email': user['email'], 'rol': user['rol']}), 200
                 else:
                     print("No se encontro el rol"+user['rol'])
                     return jsonify({'error': 'No se encontro el rol'+user['rol']}), 400
