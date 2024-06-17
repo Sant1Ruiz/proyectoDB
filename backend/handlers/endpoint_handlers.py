@@ -83,13 +83,35 @@ def get_user_details(id):
 
 @jwt_required()
 def get_solicitud(id):
-    solcitudes = db.get_solicitud(id)
-    cipher = security.load_cipher()
-    for solicitud in solcitudes:
-        solicitud['tipo_tarjeta'] = cipher.decrypt(solicitud['tipo_tarjeta']).decode()
-        solicitud['numero_tarjeta'] = cipher.decrypt(solicitud['numero_tarjeta']).decode()
-    
-    return jsonify(solcitudes)
+    if request.method == 'POST':
+        id_trabajador = get_jwt_identity()
+        claims = get_jwt()
+        rol = claims.get('rol')
+        if rol == 'Trabajador':
+            state, info = db.set_solicitud_done(id, id_trabajador)
+        else:
+            return jsonify({'error': 'Solo el trabajador de la solicitud puede marcarla como terminada'}), 401
+        
+        if state:
+            nombre = claims.get('username')
+            return jsonify({'msg': f'Solicitud {id} marcada como terminada, el trabajador "{nombre}" esta disponible!'})
+        else:
+            return jsonify({'error': f'{info}'}), 500
+
+    else:
+
+        solicitudes = db.get_solicitud(id)
+        cipher = security.load_cipher()
+        
+        if 'error' in solicitudes:
+            return jsonify(solicitudes)
+        
+        for solicitud in solicitudes:
+            if solicitud['tipo_tarjeta'].startswith("\\x"):
+                solicitud['tipo_tarjeta'] = cipher.decrypt(bytes.fromhex(solicitud['tipo_tarjeta'][2:])).decode()
+                solicitud['numero_tarjeta'] = cipher.decrypt(bytes.fromhex(solicitud['numero_tarjeta'][2:])).decode()
+        
+        return jsonify(solicitudes)
 
 @jwt_required()
 def generate_solictud():

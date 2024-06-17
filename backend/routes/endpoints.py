@@ -41,7 +41,7 @@ api.add_url_rule('/verify/sesion', 'endpoint verify', handler_sesion.verify_sesi
 api.add_url_rule('/user/<id>', 'endpoint user', handler.get_user_details, methods=['GET'])
 
 # Retorna todas las solicitudes de un cliente o trabajador, si es admin se usa history - GET
-api.add_url_rule('/solicitud/<id>', 'endpoint solicitud', handler.get_solicitud, methods=['GET'])
+api.add_url_rule('/solicitud/<id>', 'endpoint solicitud', handler.get_solicitud, methods=['GET', 'POST'])
 
 # Genera una nueva solicitud y retorna todos los datos creados - POST
 api.add_url_rule('/solicitud/add', 'endpoint añadir solicitud', handler.generate_solictud, methods=['POST'])

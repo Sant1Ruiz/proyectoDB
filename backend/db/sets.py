@@ -27,10 +27,10 @@ def add_user(conn, data, tipo_usuario):
 
         if tipo_usuario == 'Cliente':
             values2 = (
-                data['tipo_tarjeta'],
-                data['codigo_seguridad'],
-                data['fecha_expiracion'],
-                data['numero_tarjeta'],
+                psycopg2.Binary(data['tipo_tarjeta']),
+                psycopg2.Binary(data['codigo_seguridad']),
+                psycopg2.Binary(data['fecha_expiracion']),
+                psycopg2.Binary(data['numero_tarjeta']),
                 new_user_id
             )
             cur.execute("""INSERT INTO Tarjeta (tipo_tarjeta, codigo_seguridad, fecha_expiracion, numero_tarjeta, titular_id)
@@ -129,7 +129,7 @@ def add_solicitud(conn, fecha, descripcion, trabajador_id, cliente_id):
 
 
 def add_rating(conn, estrellas, comentario, fecha, solicitud_id, id_cliente):
-    try: # VALIDAR QUE EL USUARIO QUE CALIFICA SEA EL MISMO QUE RECIBIO EL SERVICIO!!!!
+    try:
         cur = conn.cursor()
         
         cur.execute("SELECT usuario_id FROM solicitud WHERE solicitud_id = %s", (solicitud_id,))
@@ -153,6 +153,31 @@ def add_rating(conn, estrellas, comentario, fecha, solicitud_id, id_cliente):
         else:
             print("El usuario no puede calificar esta solicitud pues no es el cliente de ella")
             return False, 'Este usuario no puede calificar esta solicitud. Esta solicitud no te pertenece'
+
+    except  (Exception, psycopg2.Error) as e:
+        print(f"Error al crear cursor: {e}")
+        conn.rollback()
+        return False, e
+    finally:
+        if cur:
+            cur.close()
+    
+
+
+
+def set_solicitud_done(conn, solicitud_id, trabajador_id):
+    try: # VALIDAR QUE EL USUARIO QUE CALIFICA SEA EL MISMO QUE RECIBIO EL SERVICIO!!!!
+        cur = conn.cursor()
+        
+        cur.execute("SELECT usuario_labor_id FROM solicitud WHERE solicitud_id = %s", (solicitud_id,))
+        trabajador_solicitid = cur.fetchone()[0]
+        if trabajador_id == trabajador_solicitid:
+            cur.execute("UPDATE usuario SET disponibilidad = TRUE WHERE usuario_id = %s", (trabajador_id,))        
+            conn.commit()
+            return True, ''
+        else:
+            print("El usuario no puede calificar esta solicitud pues no es el cliente de ella")
+            return False, 'Este usuario no puede terminar esta solicitud. Esta solicitud no te pertenece'
 
     except  (Exception, psycopg2.Error) as e:
         print(f"Error al crear cursor: {e}")

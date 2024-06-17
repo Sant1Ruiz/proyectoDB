@@ -226,15 +226,18 @@ def get_user_details(conn, id):
         # Obtener el promedio de estrellas y agregarlo al diccionario
         star_avg = get_star_average(conn, id)
         data['estrellas'] = star_avg
+        
+    if 'nombre_rol' in data:
+        if data['nombre_rol'] == 'Trabajador':
+            cur.execute("""SELECT l.nombre_labor, ul.precio_hora
+                        FROM usuariolabor ul
+                        JOIN labor l ON ul.labor_id = l.labor_id
+                        WHERE ul.usuario_id = %s""",
+                        (data['usuario_id'],))
+            resp = cur.fetchone()
+            data['labor'] = resp[0]
+            data['precio_hora'] = resp[1]
 
-    if data['nombre_rol'] == 'Trabajador':
-        cur.execute("""SELECT l.nombre_labor 
-                    FROM usuariolabor ul
-                    JOIN labor l ON ul.labor_id = l.labor_id
-                    WHERE ul.usuario_id = %s""",
-                    (data['usuario_id'],))
-        labor = cur.fetchone()[0]
-        data['labor'] = labor
 
     return data
 
