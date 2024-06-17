@@ -69,6 +69,8 @@ def list_jobs_taked_details(conn):
     cur.execute("""SELECT l.nombre_labor, l.imagen_labor, l.descripcion, COUNT(ul.usuario_id) AS cantidad_usuarios
                 FROM labor l
                 JOIN UsuarioLabor ul ON l.labor_id = ul.labor_id
+                JOIN usuario u ON u.usuario_id = ul.usuario_id
+                WHERE u.disponibilidad = TRUE
                 GROUP BY 
                     l.nombre_labor, l.imagen_labor, l.descripcion;
                 """)
@@ -91,6 +93,8 @@ def list_jobs_takeds_names(conn):
     cur.execute("""SELECT DISTINCT l.nombre_labor
                 FROM labor l
                 JOIN UsuarioLabor ul ON l.labor_id = ul.labor_id
+                JOIN usuario u ON u.usuario_id = ul.usuario_id
+                WHERE u.disponibilidad = TRUE;
                 """)
     rows = cur.fetchall()
     data = []
@@ -108,7 +112,7 @@ def get_all_user_for_job(conn, job):
                 FROM Usuario u
                 JOIN UsuarioLabor ul ON u.usuario_id = ul.usuario_id
                 JOIN Labor l ON ul.labor_id = l.labor_id
-                WHERE LOWER(l.nombre_labor) = %s;
+                WHERE LOWER(l.nombre_labor) = %s and u.disponibilidad = TRUE;
                 """, (job,))
     rows = cur.fetchall()
     data = []
@@ -226,7 +230,7 @@ def get_user_details(conn, id):
         # Obtener el promedio de estrellas y agregarlo al diccionario
         star_avg = get_star_average(conn, id)
         data['estrellas'] = star_avg
-        
+
     if 'nombre_rol' in data:
         if data['nombre_rol'] == 'Trabajador':
             cur.execute("""SELECT l.nombre_labor, ul.precio_hora
