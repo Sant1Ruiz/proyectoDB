@@ -303,3 +303,28 @@ def get_solicitud(conn, id):
         data.append(dict_row)
     cur.close()
     return data
+
+
+def get_ratings(conn, trabajador_id):
+    cur = conn.cursor()
+    try:    
+        cur.execute("""SELECT c.*, s.*
+                    FROM calificacion c 
+                    JOIN solicitud s ON c.solicitud_id = s.solicitud_id
+                    WHERE s.usuario_labor_id = %s
+                    """, (trabajador_id,))
+        rows = cur.fetchall()
+        data = []
+        for row in rows:
+            dict_row = {}
+            for idx, col in enumerate(cur.description):
+                dict_row[col[0]] = row[idx]
+            data.append(dict_row)
+        return data
+    except  (Exception, psycopg2.Error) as e:
+        print(f"Error al crear cursor: {e}")
+        return False
+    finally:
+        if cur:
+            cur.close()
+    

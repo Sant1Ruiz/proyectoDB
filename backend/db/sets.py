@@ -172,7 +172,8 @@ def set_solicitud_done(conn, solicitud_id, trabajador_id):
         cur.execute("SELECT usuario_labor_id FROM solicitud WHERE solicitud_id = %s", (solicitud_id,))
         trabajador_solicitid = cur.fetchone()[0]
         if trabajador_id == trabajador_solicitid:
-            cur.execute("UPDATE usuario SET disponibilidad = TRUE WHERE usuario_id = %s", (trabajador_id,))        
+            cur.execute("UPDATE usuario SET disponibilidad = TRUE WHERE usuario_id = %s", (trabajador_id,))    
+            cur.execute("UPDATE solicitud SET completado = TRUE WHERE solicitud_id = %s", (solicitud_id,))    
             conn.commit()
             return True, ''
         else:

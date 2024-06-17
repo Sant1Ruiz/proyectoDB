@@ -132,6 +132,10 @@
 
 - [x] ruta para que un trabajador pueda definir si una solicitud ya fue completada
 - **/solicitud/SOLICITUD_ID** POST
+<br>
+
+- [x] ruta que retorna la calificacion y la solicitud
+- **/calificacion/trabajador_id** GET
 
 ## OPCIONALES:
 - [x] Hacer una ruta que obtenga la información todos lo usuarios que hacen una labor en específico y que estén disponibles y que estén cerca a una latitud y longitud específica (/labor/<nombre_labor>) (Traer TODA la información del trabajador) (Puedes usar la fórmula de la distancia Haversine para filtrar las latitudes y longitudes)

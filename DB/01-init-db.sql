@@ -61,6 +61,7 @@ CREATE TABLE Solicitud (
     usuario_labor_id INT NOT NULL,
     labor_id INT NOT NULL,
     tarjeta_id INT NOT NULl,
+    completado BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (tarjeta_id) REFERENCES Tarjeta(tarjeta_id),    
     FOREIGN KEY (usuario_id) REFERENCES Usuario(usuario_id),
     FOREIGN KEY (usuario_labor_id, labor_id) REFERENCES UsuarioLabor(usuario_id, labor_id)

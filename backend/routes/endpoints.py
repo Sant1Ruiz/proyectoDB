@@ -47,4 +47,4 @@ api.add_url_rule('/solicitud/<id>', 'endpoint solicitud', handler.get_solicitud,
 api.add_url_rule('/solicitud/add', 'endpoint añadir solicitud', handler.generate_solictud, methods=['POST'])
 
 # Califica una solicitud - POST
-api.add_url_rule('/calificacion/<solicitud_id>', 'endpoint añadir calificaciones', handler.add_calificacion, methods=['POST'])
+api.add_url_rule('/calificacion/<id>', 'endpoint añadir calificaciones', handler.add_calificacion, methods=['GET', 'POST'])

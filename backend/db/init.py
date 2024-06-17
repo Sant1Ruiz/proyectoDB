@@ -68,3 +68,7 @@ def add_rating(estrellas, comentario, fecha, solicitud_id, id_cliente):
 def set_solicitud_done(id_solicitud, id_trabajador):
     resp = sets.set_solicitud_done(conn, id_solicitud, id_trabajador)
     return resp
+
+def get_ratings(trabajador_id):
+    resp =  gets.get_ratings(conn, trabajador_id)
+    return resp

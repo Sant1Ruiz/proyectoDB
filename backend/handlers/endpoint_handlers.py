@@ -144,27 +144,35 @@ def generate_solictud():
 
 
 @jwt_required()
-def add_calificacion(solicitud_id):
-    claims = get_jwt()
-    rol = claims.get('rol')
+def add_calificacion(id):
+    # Añade la calificacion a una solicitud
+    if request.method == 'POST':
+        solicitud_id = id
+        claims = get_jwt()
+        rol = claims.get('rol')
 
-    if rol == 'Cliente':
-        fecha =  date.today()
-        estrellas = request.form.get('estrellas')
-        comentario = request.form.get('comentario')
-        if estrellas is not None and comentario is not None:
+        if rol == 'Cliente':
+            fecha =  date.today()
+            estrellas = request.form.get('estrellas')
+            comentario = request.form.get('comentario')
+            if estrellas is not None and comentario is not None:
 
-            id_cliente = get_jwt_identity()
+                id_cliente = get_jwt_identity()
 
-            state, data = db.add_rating(estrellas, comentario, fecha, solicitud_id, id_cliente)
-            if state:
-                return jsonify(data)
+                state, data = db.add_rating(estrellas, comentario, fecha, solicitud_id, id_cliente)
+                if state:
+                    return jsonify(data)
+                else:
+                    return jsonify({'error': f'{data}'})
             else:
-                return jsonify({'error': f'{data}'})
-        else:
-            print("Error: estrellas o comentario has not provided")
-            return jsonify({'error': 'estrellas o comentario has not provided'})            
+                print("Error: estrellas o comentario has not provided")
+                return jsonify({'error': 'estrellas o comentario has not provided'})            
 
+        else:
+            print(f"Un {rol} no puede calificar solicitudes, solo clientes")
+            return jsonify({'error': f"Un {rol} no puede calificar solicitudes, solo clientes"}), 400
     else:
-        print(f"Un {rol} no puede calificar solicitudes, solo clientes")
-        return jsonify({'error': f"Un {rol} no puede calificar solicitudes, solo clientes"}), 400
+        # Se retornan todas las calificaciones
+        trabajador_id = id
+        ratings = db.get_ratings(trabajador_id)
+        return jsonify(ratings)
