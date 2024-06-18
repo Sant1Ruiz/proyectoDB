@@ -28,6 +28,8 @@ export class RegisterPageComponent implements OnInit {
   isAlertOpen = false;
   alertButtons = ['Aceptar'];
 
+  public thereIsDirection: boolean = false;
+
   // Excluir el rol de administrador
 
   public roles = rolesArray.filter((role) => role !== Roles.Administrador);
@@ -55,7 +57,6 @@ export class RegisterPageComponent implements OnInit {
 
 
     this.laborService.getLabores().subscribe((response) => { this.laboresList = response.labores });
-    this.getCurrentLocation().subscribe();
 
     this.registerForm.valueChanges.subscribe((value) => {
       if (value.role === Roles.Cliente) {
@@ -86,7 +87,7 @@ export class RegisterPageComponent implements OnInit {
   getLatLong() {
     // Verificar si la dirección ya fue ingresada y que sea válida
     if (this.registerForm.get('direccion')?.value
-      && this.registerForm.get('direccion')?.valid) {
+      && this.registerForm.get('direccion')?.valid && !this.thereIsDirection) {
       const address = this.registerForm.get('direccion')?.value as string;
       this.geolocationService.getAddress(address)
         .subscribe((address) => {
@@ -95,43 +96,13 @@ export class RegisterPageComponent implements OnInit {
               latitud: parseFloat(address.lat),
               longitud: parseFloat(address.lon)
             }, { emitEvent: false });
+            this.thereIsDirection = true;
           } else {
             console.log('Dirección no encontrada')
-            // this.alertMessage = 'Dirección no encontrada. Por favor, verifica la dirección ingresada.'
-            // this.setOpenAlert(true);
           }
         });
     }
   }
-
-
-  getCurrentLocation() {
-    return new Observable<GeolocationCoordinates>((observer) => {
-      window.navigator.geolocation.getCurrentPosition(
-        (position) => {
-          observer.next(position.coords);
-          observer.complete();
-        },
-        (error) => observer.error(error)
-      );
-    }).pipe(
-      retry(1), // Intentos de obtener la ubicación
-      tap(
-        (postion) => {
-          this.registerForm.patchValue({
-            latitud: postion.latitude,
-            longitud: postion.longitude
-          });
-        }
-      ),
-      catchError((error) => {
-        this.alertMessage = 'No se pudo obtener la ubicación. Por favor, activa la ubicación en tu dispositivo.'
-        this.setOpenAlert(true);
-        return throwError(console.error);
-      })
-    );
-  }
-
 
   public registerForm = this.fb.group({
 
@@ -169,11 +140,13 @@ export class RegisterPageComponent implements OnInit {
 
   setOpenAlert(isOpen: boolean, success?: boolean) {
     this.isAlertOpen = isOpen;
-    if ( success )
+    if (success)
       this.router.navigateByUrl(`/authentication/login`)
   }
 
   onSubmit() {
+
+    this.getLatLong();
 
     if (!this.registerForm.valid) {
       console.log(this.registerForm.value);
@@ -223,7 +196,7 @@ export class RegisterPageComponent implements OnInit {
       formdata.append('codigo_seguridad', registerData.codigo_seguridad as string);
       formdata.append('numero_tarjeta', registerData.numero_tarjeta as string);
       // La fecha de expiración se debe enviar en un formato que el atributo DATE en postgresql pueda entender
-      formdata.append('fecha_expiracion',  registerData.fecha_expiracion as string);
+      formdata.append('fecha_expiracion', registerData.fecha_expiracion as string);
     }
 
     if (registerData.role === Roles.Trabajador) {
@@ -232,25 +205,20 @@ export class RegisterPageComponent implements OnInit {
       formdata.append('foto_perfil', this.fotoPerfil as Blob);
       formdata.append('imagen_documento', this.imagenDocumento as Blob);
     }
-
-    this.authService.register(formdata, registerData.role as string)
-      .subscribe({
-        next: () => {
-          //! Arreglar esto para que se muestre un mensaje de éxito
-          this.alertMessage = 'Registro exitoso. Ahora puedes iniciar sesión.'
-          this.setOpenAlert(true);
-        },
-        error: (error) => {
-          console.error('Error en el registro: ', error);
-          this.alertMessage = 'Error al registrarse. Por favor, inténtalo nuevamente.';
-          this.setOpenAlert(true);
-        }
-      })
+    if (this.thereIsDirection) {
+      this.authService.register(formdata, registerData.role as string)
+        .subscribe({
+          next: () => {
+            //! Arreglar esto para que se muestre un mensaje de éxito
+            this.alertMessage = 'Registro exitoso. Ahora puedes iniciar sesión.'
+            this.setOpenAlert(true);
+          },
+          error: (error) => {
+            console.error('Error en el registro: ', error);
+            this.alertMessage = 'Error al registrarse. Por favor, inténtalo nuevamente.';
+            this.setOpenAlert(true);
+          }
+        })
+    }
   }
-
-
-
-
-
-
 }
