@@ -1,0 +1,50 @@
+
+.icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon > img {
+  margin-right: .5rem;
+}
+
+.icon > h1 {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1rem;
+}
+
+.icon > h1 > span {
+  font-size: 1.5rem;
+  color: #3976c6;
+}
+
+.custom-card-content {
+  height: 60px; /* Altura fija para el área de contenido */
+  overflow: hidden; /* Oculta el contenido que excede el área */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.custom-card-content p {
+  margin: 0; /* Elimina márgenes predeterminados */
+  text-align: justify; /* Alinea el texto de forma justificada */
+  font-size: 14px; /* Tamaño de fuente */
+  line-height: 1.4; /* Altura de línea */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Añade puntos suspensivos al final si el texto es largo */
+  white-space: nowrap; /* Evita el salto de línea */
+}
+
+ion-card-header {
+  padding-bottom: 10px;
+}
+
+// @media( max-width: 768px ) {
+//   .custom-card-content {
+//     height: 125px; /* Altura fija para el área de contenido */
+//   }
+// }

@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <shared-header></shared-header>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-content class="ion-padding">
+    <h2>Nuestros servicios:</h2>
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col *ngFor="let servicio of laboresList; let i = index" size="12" size-sm="3">
+          <ion-card>
+            <img [alt]="servicio.nombre" [src]="baseUrl+servicio.imagen" />
+            <ion-card-header>
+              <a [routerLink]="['./', servicio.nombre.toLowerCase()]">
+                <ion-card-title>
+                  {{ servicio.nombre }}
+                </ion-card-title>
+              </a>
+              <ion-card-subtitle [ngPlural]="servicio.trabajadores">
+                <ng-template ngPluralCase="=1">{{ servicio.trabajadores }} trabajador disponible</ng-template>
+                <ng-template ngPluralCase="other">{{ servicio.trabajadores }} trabajadores disponibles</ng-template>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content class="custom-card-content">
+              {{ servicio.descripcion }}
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ion-content>

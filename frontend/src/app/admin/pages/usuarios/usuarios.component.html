@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Usuarios registrados</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content [fullscreen]="true">
+  <div>
+    <ion-list>
+      <ion-row class="ion-text-center">
+        <ion-col class="ion-text-center"><strong>Usuario</strong></ion-col>
+        <ion-col class="ion-text-center"><strong>Correo</strong></ion-col>
+        <ion-col class="ion-text-center"><strong>Rol</strong></ion-col>
+      </ion-row>
+      <ion-item class="ion-text-center" *ngFor="let user of users; let index">
+        <ion-avatar *ngIf="user.nombre_rol === 'Trabajador'" slot="start">
+          <img [src]="baseUrl+user.foto_perfil" alt="avatar" />
+        </ion-avatar>
+        <ion-avatar *ngIf="user.nombre_rol === 'Cliente'" slot="start">
+          <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="avatar" />
+        </ion-avatar>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-label>
+                {{user.nombre + ' ' + user.apellido}}
+              </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>{{ user.email }}</ion-label>
+            </ion-col>
+
+            <ion-col>
+              <ion-label>{{ user.nombre_rol }} </ion-label>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </div>
+
+
+
+</ion-content>

@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Buscar servicios
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-searchbar [debounce]="500" (ionInput)="handleInput($event)" animated="true" placeholder="Busca un servicio"></ion-searchbar>
+
+  <ion-content class="ion-padding">
+    <ion-list lines="none">
+      <ion-item *ngFor="let result of results; let i = index">
+        <a [routerLink]="['../', 'servicios', result.toLowerCase()]">
+          <ion-label>{{ result }}</ion-label>
+        </a>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-content>

@@ -1,0 +1,14 @@
+ion-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.button-container {
+  display: flex; /* Use flexbox to center the button */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically if needed */
+  margin-top: 10px; /* Optional: Add space above the button */
+  width: 100%; /* Make sure the container spans full width */
+}

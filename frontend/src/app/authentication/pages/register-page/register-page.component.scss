@@ -1,0 +1,33 @@
+ion-content>div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.archivo_name {
+  margin-left: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+form {
+  width: 40rem;
+}
+
+@media(max-width: 768px) {
+  form {
+    width: 80vw;
+  }
+}
+

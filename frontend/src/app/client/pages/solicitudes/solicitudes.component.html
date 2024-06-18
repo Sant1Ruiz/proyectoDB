@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Solicitudes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ng-template #noSolicitudes>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>No hay solicitudes</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Por el momento no tienes solicitudes.</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ion-list *ngIf="isReady; else noSolicitudes" [inset]="true">
+    <ion-item *ngFor="let solicitud of solicitudes; let i = index" [button]="true" detail="false">
+      <div class="unread-indicator-wrapper" slot="start">
+        <ion-avatar aria-hidden="true" slot="start">
+          <img [alt]="solicitud.trabajador?.nombre + ' ' + solicitud.trabajador?.apellido" [src]="baseUrl + solicitud.trabajador?.foto_perfil" />
+        </ion-avatar>
+      </div>
+      <ion-label>
+        <strong>{{ solicitud.trabajador?.nombre + ' ' + solicitud.trabajador?.apellido  }}</strong>
+        <ion-text>{{ solicitud.trabajador?.labor }}</ion-text><br />
+        <ion-note color="medium" class="ion-text-wrap">{{ solicitud.descripcion }}</ion-note><br/>
+        <ion-text color="primary" class="text-estado" *ngIf="!solicitud.trabajador?.disponibilidad; else disponible">En proceso</ion-text>
+        <!-- ! Cambiar por el estado de la solicitud -->
+        <ng-template #disponible>
+          <ion-text color="success" class="text-estado">Terminado</ion-text><br/>
+          <!-- Boton para calificar solicitud (click)="calificarSolicitud(solicitud)" -->
+          <ion-button *ngIf="!solicitud.isCalificado" fill="clear" color="warning" [routerLink]="['../', 'calificar-worker', solicitud.solicitud_id]" >
+            <ion-icon slot="icon-only" name="star"></ion-icon>
+            <ion-text class="calificar-btn">Calificar</ion-text>
+          </ion-button>
+        </ng-template>
+      </ion-label>
+      <div class="metadata-end-wrapper" slot="end">
+        <ion-note color="medium">{{ solicitud.fecha | date : 'shortTime' }}</ion-note>
+        <ion-icon color="medium" name="chevron-forward"></ion-icon>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

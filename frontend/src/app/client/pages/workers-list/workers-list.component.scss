@@ -1,0 +1,21 @@
+ion-item-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-item-option ion-icon {
+  // AUmenta o tamanho do ícone
+  font-size: 1.2rem;
+  margin-right: 0;
+}
+
+.solicitar-button {
+  color: #000;
+  // Quitar estilo de enlace
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}

@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Solicitar trabajador</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content *ngIf="!worker; else contenido" class="ion-padding">
+  <P>
+    Cargando...
+  </P>
+  <!-- Loader  -->
+  <ion-spinner name="crescent"></ion-spinner>
+</ion-content>
+
+<ng-template #contenido>
+  <ion-content class="ion-padding container" [fullscreen]="true">
+    <div class="content">
+      <ion-card>
+        <img [alt]="worker.nombre + ' ' + worker.apellido" [src]="baseUrl+worker.foto_perfil" />
+        <ion-card-header>
+          <ion-card-title>{{ worker.nombre + ' ' + worker.apellido }}</ion-card-title>
+          <ion-card-subtitle>{{ nombreLabor | titlecase }}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <!-- Precio por hora -->
+          <ion-icon name="cash-sharp"></ion-icon>
+          {{ worker.precio_hora | currency: 'COP': 'symbol' : '1.2-2' }}/hora
+        </ion-card-content>
+
+        <ion-card-content class="estrella-content">
+          <!-- Precio por hora -->
+          <ion-icon color="warning" name="star-sharp"></ion-icon>
+          {{ worker.estrellas | number: '1.2-2' }}
+        </ion-card-content>
+
+      </ion-card>
+
+
+      <form [formGroup]="solicitudForm" (submit)="onSubmit()">
+        <ion-item>
+          <ion-label class="custom-label" position="stacked">Descripción</ion-label>
+          <ion-textarea formControlName="descripcion" placeholder="Descripción de la labor a realizar" auto-grow="true"></ion-textarea>
+        </ion-item>
+
+
+
+        <div class="button-container">
+          <ion-button size="default" type="submit">Enviar</ion-button>
+          <ion-alert [isOpen]="isAlertOpen" header="Información" [message]="alertMessage" [buttons]="alertButtons"
+            (didDismiss)="setOpenAlert(false, true)">
+          </ion-alert>
+        </div>
+      </form>
+
+
+
+    </div>
+  </ion-content>
+</ng-template>

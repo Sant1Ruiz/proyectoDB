@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Historial de solicitudes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list [inset]="true">
+    <ion-item-sliding *ngFor="let solicitud of solicitudes; let i = index">
+      <ion-item [button]="true">
+        <ion-label>
+          {{ solicitud.cliente.nombre + ' ' + solicitud.cliente.apellido }}<br />
+          <ion-text color="medium">{{ solicitud.solicitud.descripcion }}</ion-text><br />
+          <ion-note>{{ solicitud.cliente.latitud }}, {{ solicitud.cliente.longitud }}</ion-note><br />
+          <ion-note>Número: {{ solicitud.cliente.telefono }}</ion-note><br />
+          <!-- dos ion-note en caso de que la solicitud se haya completado -->
+          <ion-note *ngIf="solicitud.solicitud.completado" color="success">
+            <strong>Completado</strong>
+          </ion-note>
+          <ion-note *ngIf="!solicitud.solicitud.completado" color="danger">
+            <strong>En proceso</strong>
+          </ion-note>
+        </ion-label>
+        <ion-note slot="end">{{ solicitud.solicitud.fecha | date:'short'}}</ion-note>
+
+      </ion-item>
+
+      <ion-item-options slot="end" *ngIf="!solicitud.solicitud.completado">
+        <ion-item-option color="success" expandable="true" [disabled]="">
+          <a class="solicitar-button" (click)="completarSolicitud(solicitud.solicitud.solicitud_id)">
+            <ion-icon name="checkmark-outline"></ion-icon>
+            <span>Completar</span>
+          </a>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-alert [isOpen]="isAlertOpen" header="Información" [message]="alertMessage" [buttons]="alertButtons"
+      (didDismiss)="setOpenAlert(false, true)">
+    </ion-alert>
+  </ion-list>
+
+
+
+</ion-content>

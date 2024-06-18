@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Califica al trabajador
+      <ion-icon name="star" color="warning"></ion-icon>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding" [fullscreen]="true">
+
+  <div>
+    <form [formGroup]="calificacionForm" (submit)="onSubmit()">
+
+      <!-- Un ionic item que tenga un ngFor de estrellas (ion-icon) -->
+      <ion-item>
+        <ion-label>
+          Calificación
+        </ion-label>
+        <ion-input formControlName="calificacion" type="number" placeholder="Ejemplo: 4.5, 5"></ion-input>
+      </ion-item>
+
+
+      <!-- Un ion-item con un ion-label y un ion-textarea para que el usuario pueda escribir un comentario -->
+      <ion-item>
+        <ion-label position="floating">Comentario</ion-label>
+        <ion-textarea formControlName="comentario"></ion-textarea>
+      </ion-item>
+
+      <!-- Boton para enviar la calificación -->
+      <div class="button-container">
+        <ion-button size="default" type="submit">Enviar calificación</ion-button>
+        <ion-alert [isOpen]="isAlertOpen" header="Información" [message]="alertMessage" [buttons]="alertButtons"
+          (didDismiss)="setOpenAlert(false, true)">
+        </ion-alert>
+      </div>
+    </form>
+
+  </div>
+
+</ion-content>

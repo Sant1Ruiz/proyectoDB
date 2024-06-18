@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Cuenta {{ role | titlecase }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content [fullscreen]="true">
+
+  <div *ngIf="!trabajador; else content">
+    <!-- Loader -->
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <ng-template #content>
+    <ion-content class="ion-padding cuenta-container">
+      <div class="cuenta-avatar">
+        <ion-avatar>
+          <img [alt]="trabajador.nombre" [src]="baseUrl+trabajador.foto_perfil" />
+        </ion-avatar>
+        <ion-button (click)="logout()" shape="round">Cerrar Sesion</ion-button>
+      </div>
+
+      <div class="cuenta-informacion">
+        <ion-list [inset]="true">
+          <ion-item>
+            <ion-label>
+              <ion-text> Cargo </ion-text>
+              <p>{{ role | titlecase }}</p>
+            </ion-label>
+          </ion-item>
+
+          <!-- Mostrar un item con las estrellas promedio que tiene el trabajador -->
+          <ion-item>
+            <ion-label>
+              <ion-text>Calificación</ion-text><br>
+              <strong>
+                <ion-icon color="warning" name="star"></ion-icon> {{ trabajador.estrellas | number: '1.2-2'}}
+              </strong>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <ion-text> Nombre </ion-text>
+              <p>{{ user?.name | titlecase }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <ion-text>Apellido</ion-text>
+              <p>{{ user?.lastname | titlecase }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <ion-text>Email</ion-text>
+              <p>{{ trabajador.email }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <ion-text>Celular</ion-text>
+              <p>{{ user?.phone }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-content>
+  </ng-template>
+
+</ion-content>

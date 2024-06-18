@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Reporte de solicitudes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+
+  <div class="listaUsuarios">
+
+
+    <ion-list>
+      <ion-row class="space ion-text-center">
+        <ion-col  class="ion-text-center"><strong>Usuario ID</strong></ion-col>
+        <ion-col  class="ion-text-center"><strong>Trabajador ID</strong></ion-col>
+        <ion-col  class="ion-text-center"><strong>Labor ID</strong></ion-col>
+        <ion-col  class="ion-text-center"><strong>Fecha</strong></ion-col>
+      </ion-row>
+      <ion-item *ngFor="let solicitud of history; let i = index">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-label>
+                {{ solicitud.usuario_id }}
+              </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>
+                {{solicitud.usuario_labor_id}}
+              </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>
+                {{ solicitud.labor_id }}
+              </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>
+                {{ solicitud.fecha | date: 'medium' }}
+              </ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>

@@ -1,0 +1,48 @@
+.cuenta-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.cuenta-avatar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.cuenta-avatar ion-avatar {
+  width: 180px;
+  height: 180px;
+}
+
+.cuenta-avatar ion-button {
+  margin-top: 10px;
+  width: 16rem;
+
+}
+
+.cuenta-informacion {
+  display: flex;
+  justify-content: center;
+}
+
+.cuenta-informacion ion-list {
+  width: 100%;
+}
+
+
+@media(min-width: 768px) {
+  .cuenta-informacion {
+    width: 40vw;
+    margin: auto;
+  }
+
+  .cuenta-avatar ion-avatar {
+    width: 250px;
+    height: 250px;
+  }
+}

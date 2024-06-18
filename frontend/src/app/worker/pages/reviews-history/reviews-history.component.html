@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Calificaciones</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div>
+    <ion-grid [fixed]="true" class="ion-text-center">
+      <ion-row>
+        <ion-col style="background-color: #83a0f0;"><strong>Usuario</strong></ion-col>
+        <ion-col style="background-color: #83a0f0;"><strong>Labor</strong></ion-col>
+        <ion-col style="background-color: #83a0f0;"><strong>Comentario</strong></ion-col>
+        <ion-col style="background-color: #83a0f0;"><strong> <ion-icon name="star" aria-label="Favorite"></ion-icon> </strong></ion-col>
+      </ion-row>
+      <ion-row *ngFor="let calificacion of califications">
+        <ion-col>{{ calificacion.usuario_id }}</ion-col>
+        <ion-col>{{ calificacion.labor_id }}</ion-col>
+        <ion-col>{{ calificacion.comentario }}</ion-col>
+        <ion-col>{{ calificacion.estrellas }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,145 @@
+<ion-content class="ion-padding" [fullscreen]="true">
+
+  <div>
+    <shared-icon></shared-icon>
+    <!--! No olvidar: Agregar FormGrou y Submit -->
+    <form [formGroup]="registerForm" (submit)="onSubmit()">
+      <h2 class="ion-text-center">Bienvendo a la página de registro</h2>
+
+      <ion-item>
+        <ion-select formControlName="role" placeholder="Selecciona un rol" interface="action-sheet">
+          <div slot="label">Rol:<ion-text color="danger">*</ion-text></div>
+          <ion-select-option *ngFor="let role of roles" value="{{role}}">{{role | titlecase}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-input formControlName="name" label="Nombre:" labelPlacement="floating" placeholder="Pepito"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input formControlName="lastname" label="Apellido:" labelPlacement="floating"
+          placeholder="Pérez"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input formControlName="email" label="Correo:" labelPlacement="floating"
+          placeholder="correo@mail.com"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input formControlName="direccion" label="Dirección:" labelPlacement="floating"
+          placeholder="Cra 123, Cl 456, Barrio Tal"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input formControlName="telefono" label="Teléfono:" labelPlacement="floating"
+          placeholder="1234567890"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input formControlName="password" label="Contraseña:" labelPlacement="floating" type="password"
+          placeholder="********"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="isWorker">
+        <ion-select formControlName="labor" placeholder="Selecciona una labor" interface="action-sheet">
+          <div slot="label">Labor:<ion-text color="danger">*</ion-text></div>
+          <ion-select-option *ngFor="let labor of laboresList" value="{{labor}}">{{labor |
+            titlecase}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+
+      <ion-item *ngIf="isWorker">
+        <!-- "transaction-currency" -->
+        <ion-input formControlName="precio_hora" label="Precio por hora de labor:" labelPlacement="floating"
+          autocomplete="transaction-currency" placeholder="0.00"></ion-input>
+      </ion-item>
+
+      <!--
+      tipo_tarjeta = request.form.get('tipo_tarjeta')
+      codigo_seguridad = request.form.get('codigo_seguridad')
+      fecha_expiracion = request.form.get('fecha_expiracion')
+      numero_tarjeta = request.form.get('numero_tarjeta')
+
+      -->
+
+      <ion-item *ngIf="isClient">
+        <ion-select formControlName="tipo_tarjeta" placeholder="Selecciona un tipo de tarjeta" interface="action-sheet">
+          <div slot="label">Tipo de tarjeta:<ion-text color="danger">*</ion-text></div>
+          <ion-select-option *ngFor="let tipo of tiposTarjeta" value="{{tipo}}">{{tipo |
+            titlecase}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="isClient">
+        <ion-input formControlName="numero_tarjeta" label="Número de tarjeta:" labelPlacement="floating"
+          placeholder="1234567890"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="isClient">
+        <ion-input formControlName="codigo_seguridad" label="Código de seguridad:" labelPlacement="floating"
+          placeholder="CVV"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="isClient">
+        <ion-label>Expiration Date</ion-label>
+        <ion-datetime-button datetime="datetime"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime formControlName="fecha_expiracion" id="datetime" [showDefaultButtons]="true" [min]="today" [max]="'2099'" presentation="month-year"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+
+      </ion-item>
+
+
+
+      <ion-item *ngIf="isClient">
+        <ion-button (click)="f.click()">
+          <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+          <ion-label slot="end">Recibo de servicios públicos</ion-label>
+        </ion-button>
+        <input class="ion-hide" #f type="file" (change)="serviciosPublicos($event)" id="file-input1"
+          accept="image/png, image/jpeg, application/pdf">
+
+        <span class="archivo_name">{{ reciboPublico?.name }}</span>
+      </ion-item>
+
+      <ion-item *ngIf="isWorker">
+        <ion-button (click)="g.click()">
+          <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+          <ion-label slot="end">Documento de identificación</ion-label>
+        </ion-button>
+        <input class="ion-hide" #g type="file" (change)="documentoIdentidad($event)" id="file-input2"
+          accept="image/png, image/jpeg, application/pdf">
+
+        <ion-text class="archivo_name">{{ imagenDocumento?.name }}</ion-text>
+      </ion-item>
+
+      <ion-item *ngIf="isWorker">
+        <ion-button (click)="h.click()">
+          <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+          <ion-label slot="end">Foto de perfil</ion-label>
+        </ion-button>
+        <input class="ion-hide" #h type="file" (change)="fotoPerfilImage($event)" id="file-input3"
+          accept="image/png, image/jpeg">
+        <ion-text class="archivo_name">{{ fotoPerfil?.name }}</ion-text>
+      </ion-item>
+
+
+      <p>Ya tienes cuenta? <a routerLink="/authentication/login">Inicia Sesión</a></p>
+
+
+      <div class="ion-padding submit-button">
+        <ion-button size="default" type="submit">Enviar</ion-button>
+        <ion-alert [isOpen]="isAlertOpen" header="Información" [message]="alertMessage" [buttons]="alertButtons"
+          (didDismiss)="setOpenAlert(false, true)">
+        </ion-alert>
+      </div>
+    </form>
+  </div>
+
+
+</ion-content>

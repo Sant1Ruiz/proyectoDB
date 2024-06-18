@@ -1,0 +1,22 @@
+.icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.icon > img {
+  margin-right: .5rem;
+}
+
+.icon > h1 {
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 2rem;
+}
+
+.icon > h1 > span {
+  font-size: 2.5rem;
+  color: #3976c6;
+}
